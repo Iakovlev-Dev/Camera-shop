@@ -9,7 +9,7 @@ export default function Sorting () {
             type="radio"
             id={item}
             name="sort"
-            checked = {item === 'sortPrice'}
+            defaultChecked={item === 'sortPrice'}
           />
           <label htmlFor={item}>{SortBy[item]}</label>
         </div>
