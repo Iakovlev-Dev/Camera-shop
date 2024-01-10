@@ -9,7 +9,7 @@ export default function SortingBtn () {
             type="radio"
             id={item}
             name="sort-icon"
-            checked = {item === 'up'}
+            defaultChecked = {item === 'up'}
             aria-label={SortBtn[item]}
           />
           <label htmlFor={item}>

@@ -39,3 +39,12 @@ export const SortBtn: SortBy<string> = {
   up: 'по возрастанию',
   down: 'по убыванию'
 };
+
+export const NameSpace = {
+  DATA_CARDS: 'DATA_CARDS'
+};
+
+export const APIRoute = {
+  Cameras: '/cameras',
+  Promo: '/promo'
+};

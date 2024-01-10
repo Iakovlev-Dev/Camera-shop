@@ -20,7 +20,7 @@ export default function Card () {
       </div>
       <div className="product-card__info">
         <div className="rate product-card__rate">
-          <CardRating count={1}/>
+          <CardRating count={4}/>
           <p className="visually-hidden">Рейтинг: 3</p>
           <p className="rate__count">
             <span className="visually-hidden">Всего оценок:</span>23
