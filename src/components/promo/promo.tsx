@@ -1,13 +1,20 @@
+import { Link } from 'react-router-dom';
+import { selectCards } from '../../store/data-card-process/selectors';
+import { useAppSelector } from '../../store/hooks';
 import { TPromo } from '../../types/type-promo';
+
 
 type TPromoProps = {
     promo: TPromo;
 }
 
 export default function Promo ({promo}: TPromoProps) {
+  const cards = useAppSelector(selectCards);
+  const currentCamera = cards?.find((item) => promo.id === item.id);
+  const pathCard = `/cameras/${promo.id}`;
 
-  return (
-    <>
+  return (currentCamera &&
+    <div className="banner">
       <picture>
         <source
           type="image/webp"
@@ -27,12 +34,12 @@ export default function Promo ({promo}: TPromoProps) {
           {promo.name}
         </span>
         <span className="banner__text">
-          Профессиональная камера от&nbsp;известного производителя
+          {currentCamera.description}
         </span>
-        <a className="btn" href="#">
+        <Link className="btn" to={pathCard}>
           Подробнее
-        </a>
+        </Link>
       </p>
-    </>
+    </div>
   );
 }

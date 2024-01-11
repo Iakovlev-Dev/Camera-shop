@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { TCamera } from '../../types/type-camera';
 import CardRating from '../card-rating/card-rating';
 
@@ -6,7 +7,7 @@ type TCard = {
 }
 
 export default function Card ({card}: TCard) {
-
+  const pathCard = `/cameras/${card.id}`;
   return (
     <div className="product-card">
       <div className="product-card__img">
@@ -46,9 +47,9 @@ export default function Card ({card}: TCard) {
         >
         Купить
         </button>
-        <a className="btn btn--transparent" href="#">
+        <Link className="btn btn--transparent" to={pathCard}>
         Подробнее
-        </a>
+        </Link>
       </div>
     </div>
   );
