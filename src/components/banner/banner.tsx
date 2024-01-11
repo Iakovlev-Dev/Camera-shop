@@ -2,14 +2,11 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { selectPromo } from '../../store/data-card-process/selectors';
 import { useAppSelector } from '../../store/hooks';
 import Promo from '../promo/promo';
-
+import { Autoplay, Navigation, Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import './style.css';
-
-
-import { Autoplay, Navigation, Pagination } from 'swiper/modules';
 
 export default function Banner () {
   const promo = useAppSelector(selectPromo);
