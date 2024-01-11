@@ -3,6 +3,7 @@ import { TAppDispatch, TState } from '../types/type-store';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { TCameraArray } from '../types/type-camera';
 import { APIRoute } from '../const';
+import { TPromoArray } from '../types/type-promo';
 
 
 type TAPIAction = {
@@ -14,6 +15,13 @@ type TAPIAction = {
 export const fetchCardsAction = createAsyncThunk<TCameraArray, undefined, TAPIAction>('fetchCards',
   async (_arg, {extra: api}) => {
     const {data} = await api.get<TCameraArray>(APIRoute.Cameras);
+    return data;
+  }
+);
+
+export const fetchPromoAction = createAsyncThunk<TPromoArray, undefined, TAPIAction>('fetchPromo',
+  async (_arg, {extra: api}) => {
+    const {data} = await api.get<TPromoArray>(APIRoute.Promo);
     return data;
   }
 );

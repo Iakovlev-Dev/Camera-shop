@@ -1,36 +1,43 @@
+import { Link } from 'react-router-dom';
+import { TCamera } from '../../types/type-camera';
 import CardRating from '../card-rating/card-rating';
 
-export default function Card () {
+type TCard = {
+  card: TCamera;
+}
+
+export default function Card ({card}: TCard) {
+  const pathCard = `/cameras/${card.id}`;
   return (
     <div className="product-card">
       <div className="product-card__img">
         <picture>
           <source
             type="image/webp"
-            srcSet="img/content/das-auge.webp, img/content/das-auge@2x.webp 2x"
+            srcSet={card.previewImgWebp}
           />
           <img
-            src="img/content/das-auge.jpg"
-            srcSet="img/content/das-auge@2x.jpg 2x"
+            src={card.previewImg}
+            srcSet={card.previewImg2x}
             width={280}
             height={240}
-            alt="Ретрокамера «Das Auge IV»"
+            alt={card.name}
           />
         </picture>
       </div>
       <div className="product-card__info">
         <div className="rate product-card__rate">
-          <CardRating count={4}/>
-          <p className="visually-hidden">Рейтинг: 3</p>
+          <CardRating count={card.rating}/>
+          <p className="visually-hidden">Рейтинг: {card.rating}</p>
           <p className="rate__count">
-            <span className="visually-hidden">Всего оценок:</span>23
+            <span className="visually-hidden">Всего оценок:</span>{card.reviewCount}
           </p>
         </div>
         <p className="product-card__title">
-                      Ретрокамера Das Auge IV
+          {card.name}
         </p>
         <p className="product-card__price">
-          <span className="visually-hidden">Цена:</span>73 450 ₽
+          <span className="visually-hidden">Цена:</span>{card.price} ₽
         </p>
       </div>
       <div className="product-card__buttons">
@@ -40,9 +47,9 @@ export default function Card () {
         >
         Купить
         </button>
-        <a className="btn btn--transparent" href="#">
+        <Link className="btn btn--transparent" to={pathCard}>
         Подробнее
-        </a>
+        </Link>
       </div>
     </div>
   );
