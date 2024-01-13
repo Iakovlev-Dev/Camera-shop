@@ -30,11 +30,7 @@ export default function PageMain () {
   const firstCardIndex = lastCardIndex - CARD_ON_PAGE;
   const currentCardPage = cards?.slice(firstCardIndex, lastCardIndex);
   const dispatch = useAppDispatch();
-  if(!cards) {
-    return;
-  }
 
-  const countPages = Math.ceil(cards.length / CARD_ON_PAGE);
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   function closePopup () {
@@ -61,7 +57,11 @@ export default function PageMain () {
     document.removeEventListener('keydown', onDocumentEscKeyDown);
     closePopup();
   }
+  if(!cards) {
+    return;
+  }
 
+  const countPages = Math.ceil(cards.length / CARD_ON_PAGE);
 
   return (
     <div className="wrapper">
