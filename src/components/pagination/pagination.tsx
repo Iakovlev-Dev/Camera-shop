@@ -1,3 +1,4 @@
+import ButtonPagination from '../pagination-button-prev/pagination-button-prev';
 
 type TPagination = {
     count: number;
@@ -11,13 +12,7 @@ export default function Pagination ({count, currentPage, setPage}: TPagination) 
   return (
     <div className="pagination">
       <ul className="pagination__list">
-        <li className="pagination__item">
-          <a
-            className="pagination__link pagination__link--text"
-          >
-            Назад
-          </a>
-        </li>
+        <ButtonPagination button="prev"/>
         {pagesArray.map((item) => (
           <li className="pagination__item" key={item}>
             <a
@@ -28,13 +23,7 @@ export default function Pagination ({count, currentPage, setPage}: TPagination) 
             </a>
           </li>
         ))}
-        <li className="pagination__item">
-          <a
-            className="pagination__link pagination__link--text"
-          >
-            Далее
-          </a>
-        </li>
+        <ButtonPagination button="next"/>
       </ul>
     </div>
   );
