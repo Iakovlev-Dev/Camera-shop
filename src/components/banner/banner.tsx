@@ -25,15 +25,11 @@ export default function Banner () {
       modules={[Autoplay, Pagination, Navigation]}
       className="mySwiper"
     >
-      <SwiperSlide>
-        <Promo promo={promo[0]}/>
-      </SwiperSlide>
-      <SwiperSlide>
-        <Promo promo={promo[1]}/>
-      </SwiperSlide>
-      <SwiperSlide>
-        <Promo promo={promo[2]}/>
-      </SwiperSlide>
+      {promo.map((item) => (
+        <SwiperSlide key={item.id}>
+          <Promo promo={item} />
+        </SwiperSlide>
+      ))}
     </Swiper>
   );
 }
