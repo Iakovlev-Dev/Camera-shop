@@ -4,10 +4,12 @@ import CardRating from '../card-rating/card-rating';
 
 type TCard = {
   card: TCamera;
+  clickEsc: (arg0: TCamera) => void;
 }
 
-export default function Card ({card}: TCard) {
+export default function Card ({card, clickEsc}: TCard) {
   const pathCard = `/cameras/${card.id}`;
+
   return (
     <div className="product-card">
       <div className="product-card__img">
@@ -44,6 +46,7 @@ export default function Card ({card}: TCard) {
         <button
           className="btn btn--purple product-card__btn"
           type="button"
+          onClick={() => clickEsc(card)}
         >
         Купить
         </button>

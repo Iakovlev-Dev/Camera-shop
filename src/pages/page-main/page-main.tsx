@@ -6,27 +6,62 @@ import Sorting from '../../components/sorting/sorting';
 import SortingBtn from '../../components/sorting-btn/sorting-btn';
 import Footer from '../../components/footer/footer';
 import Card from '../../components/card/card';
-import { useAppSelector } from '../../store/hooks';
-import { selectCards } from '../../store/data-card-process/selectors';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { selectCards, selectIsClickBuy } from '../../store/data-card-process/selectors';
 import Banner from '../../components/banner/banner';
 import Pagination from '../../components/pagination/pagination';
 import { useState } from 'react';
+import PopupAddCameras from '../../components/popup-add-camera/popup-add-camera';
+import { setCardId, setClickBuy } from '../../store/data-card-process/data-card-process';
+import { TCamera } from '../../types/type-camera';
 
 const CARD_ON_PAGE = 9;
 
+type TEventKey = {
+  key: string;
+  preventDefault: () => void;
+}
+
 export default function PageMain () {
   const cards = useAppSelector(selectCards);
-  // const [currentPage, setCurrentPage] = useState(1);
+  const isClickBuyButton = useAppSelector(selectIsClickBuy);
   const [currentPage, setCurrentPage] = useState(1);
   const lastCardIndex = currentPage * CARD_ON_PAGE;
   const firstCardIndex = lastCardIndex - CARD_ON_PAGE;
   const currentCardPage = cards?.slice(firstCardIndex, lastCardIndex);
+  const dispatch = useAppDispatch();
   if(!cards) {
     return;
   }
 
   const countPages = Math.ceil(cards.length / CARD_ON_PAGE);
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
+  function closePopup () {
+    dispatch(setClickBuy(false));
+    document.body.classList.remove('scroll-lock');
+  }
+
+  function onDocumentEscKeyDown (evt: TEventKey) {
+    if(evt.key === 'Escape') {
+      evt.preventDefault();
+      document.removeEventListener('keydown', onDocumentEscKeyDown);
+      closePopup();
+    }
+  }
+
+  function handleClickBuy (card: TCamera) {
+    dispatch(setClickBuy(true));
+    dispatch(setCardId(card));
+    document.body.classList.add('scroll-lock');
+    document.addEventListener('keydown', onDocumentEscKeyDown);
+  }
+
+  function handleClickCloseButton () {
+    document.removeEventListener('keydown', onDocumentEscKeyDown);
+    closePopup();
+  }
+
 
   return (
     <div className="wrapper">
@@ -116,14 +151,21 @@ export default function PageMain () {
                     </form>
                   </div>
                   <div className="cards catalog__cards">
-                    {currentCardPage?.map((item) => <Card key={item.id} card={item}/>)}
+                    {currentCardPage?.map((item) =>
+                      (
+                        <Card
+                          key={item.id}
+                          card={item}
+                          clickEsc={handleClickBuy}
+                        />))}
                   </div>
-                  <Pagination count={countPages} currentPage={currentPage} setPage={paginate}/>
+                  <Pagination count={countPages} currentPage={currentPage} setPage={paginate} />
                 </div>
               </div>
             </div>
           </section>
         </div>
+        {isClickBuyButton && <PopupAddCameras clickClose={handleClickCloseButton}/>}
       </main>
       <Footer />
     </div>
