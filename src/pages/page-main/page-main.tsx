@@ -9,9 +9,24 @@ import Card from '../../components/card/card';
 import { useAppSelector } from '../../store/hooks';
 import { selectCards } from '../../store/data-card-process/selectors';
 import Banner from '../../components/banner/banner';
+import Pagination from '../../components/pagination/pagination';
+import { useState } from 'react';
+
+const CARD_ON_PAGE = 9;
 
 export default function PageMain () {
   const cards = useAppSelector(selectCards);
+  // const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const lastCardIndex = currentPage * CARD_ON_PAGE;
+  const firstCardIndex = lastCardIndex - CARD_ON_PAGE;
+  const currentCardPage = cards?.slice(firstCardIndex, lastCardIndex);
+  if(!cards) {
+    return;
+  }
+
+  const countPages = Math.ceil(cards.length / CARD_ON_PAGE);
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   return (
     <div className="wrapper">
@@ -101,38 +116,9 @@ export default function PageMain () {
                     </form>
                   </div>
                   <div className="cards catalog__cards">
-                    {cards?.map((item) => <Card key={item.id} card={item}/>)}
+                    {currentCardPage?.map((item) => <Card key={item.id} card={item}/>)}
                   </div>
-                  <div className="pagination">
-                    <ul className="pagination__list">
-                      <li className="pagination__item">
-                        <a
-                          className="pagination__link pagination__link--active"
-
-                        >
-                      1
-                        </a>
-                      </li>
-                      <li className="pagination__item">
-                        <a className="pagination__link" >
-                      2
-                        </a>
-                      </li>
-                      <li className="pagination__item">
-                        <a className="pagination__link" >
-                      3
-                        </a>
-                      </li>
-                      <li className="pagination__item">
-                        <a
-                          className="pagination__link pagination__link--text"
-
-                        >
-                      Далее
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
+                  <Pagination count={countPages} currentPage={currentPage} setPage={paginate}/>
                 </div>
               </div>
             </div>
