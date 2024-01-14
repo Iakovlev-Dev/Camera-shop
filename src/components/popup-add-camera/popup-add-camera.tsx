@@ -2,15 +2,23 @@ import { selectCardId } from '../../store/data-card-process/selectors';
 import { useAppSelector } from '../../store/hooks';
 
 type TPopupAdd = {
-    clickClose: () => void;
+  onClose: () => void;
 }
 
-export default function PopupAddCameras ({clickClose}:TPopupAdd) {
+export default function PopupAddCameras ({onClose}:TPopupAdd) {
 
   const cardCurrent = useAppSelector(selectCardId);
 
   return (cardCurrent &&
-    <div className="modal is-active">
+    <div className="modal is-active"
+      onClick={
+        (evt) => {
+          if((evt.target as Element).className === 'modal__overlay') {
+            onClose();
+          }
+        }
+      }
+    >
       <div className="modal__wrapper">
         <div className="modal__overlay" />
         <div className="modal__content">
@@ -57,7 +65,7 @@ export default function PopupAddCameras ({clickClose}:TPopupAdd) {
           Добавить в корзину
             </button>
           </div>
-          <button className="cross-btn" type="button" aria-label="Закрыть попап" onClick={() => clickClose()}>
+          <button className="cross-btn" type="button" aria-label="Закрыть попап" onClick={() => onClose()}>
             <svg width={10} height={10} aria-hidden="true">
               <use xlinkHref="#icon-close" />
             </svg>
