@@ -3,6 +3,8 @@
     text-align: right;
     padding-right: 70px;
     padding-bottom: 30px;
+    display: flex;
+    justify-content: end;
 }
 
 .swiper-pagination-bullet {

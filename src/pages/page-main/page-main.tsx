@@ -10,23 +10,53 @@ import { useAppSelector } from '../../store/hooks';
 import { selectCards } from '../../store/data-card-process/selectors';
 import Banner from '../../components/banner/banner';
 import Pagination from '../../components/pagination/pagination';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import PopupAddCameras from '../../components/popup-add-camera/popup-add-camera';
 
 const CARD_ON_PAGE = 9;
 
+type TEventKey = {
+  key: string;
+  preventDefault: () => void;
+}
+
 export default function PageMain () {
   const cards = useAppSelector(selectCards);
-  // const [currentPage, setCurrentPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const lastCardIndex = currentPage * CARD_ON_PAGE;
   const firstCardIndex = lastCardIndex - CARD_ON_PAGE;
   const currentCardPage = cards?.slice(firstCardIndex, lastCardIndex);
+
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
+  const [isOpenModal, setOpenModal] = useState(false);
+
+  const handleOpenModal = () => {
+    setOpenModal(true);
+    document.body.classList.add('scroll-lock');
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    document.body.classList.remove('scroll-lock');
+  };
+
+  useEffect(() => {
+    const handleClickEsc = (evt: TEventKey) => {
+      if (evt.key === 'Escape') {
+        setOpenModal(false);
+      }
+    };
+    document.addEventListener('keydown', handleClickEsc);
+    return () => document.removeEventListener('keydown', handleClickEsc);
+  }, [isOpenModal]);
+
+
   if(!cards) {
     return;
   }
 
   const countPages = Math.ceil(cards.length / CARD_ON_PAGE);
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   return (
     <div className="wrapper">
@@ -116,7 +146,13 @@ export default function PageMain () {
                     </form>
                   </div>
                   <div className="cards catalog__cards">
-                    {currentCardPage?.map((item) => <Card key={item.id} card={item}/>)}
+                    {currentCardPage?.map((item) =>
+                      (
+                        <Card
+                          key={item.id}
+                          card={item}
+                          onClick={() => handleOpenModal()}
+                        />))}
                   </div>
                   <Pagination count={countPages} currentPage={currentPage} setPage={paginate}/>
                 </div>
@@ -124,6 +160,7 @@ export default function PageMain () {
             </div>
           </section>
         </div>
+        {isOpenModal && <PopupAddCameras onClose={handleCloseModal} />}
       </main>
       <Footer />
     </div>

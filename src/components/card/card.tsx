@@ -1,13 +1,23 @@
 import { Link } from 'react-router-dom';
 import { TCamera } from '../../types/type-camera';
 import CardRating from '../card-rating/card-rating';
+import { useAppDispatch } from '../../store/hooks';
+import { setCardId } from '../../store/data-card-process/data-card-process';
 
 type TCard = {
   card: TCamera;
+  onClick: () => void;
 }
 
-export default function Card ({card}: TCard) {
+export default function Card ({card, onClick}: TCard) {
   const pathCard = `/cameras/${card.id}`;
+  const dispatch = useAppDispatch();
+
+  const handleClick = (cardId: TCamera) => {
+    onClick();
+    dispatch(setCardId(cardId));
+  };
+
   return (
     <div className="product-card">
       <div className="product-card__img">
@@ -44,6 +54,7 @@ export default function Card ({card}: TCard) {
         <button
           className="btn btn--purple product-card__btn"
           type="button"
+          onClick={() => handleClick(card)}
         >
         Купить
         </button>

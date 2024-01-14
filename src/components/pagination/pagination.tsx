@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ButtonPagination from '../pagination-button-prev/pagination-button-prev';
 import PaginationPage from '../pagination-page/pagination-page';
+import { useSearchParams } from 'react-router-dom';
+
 
 type TPagination = {
     count: number;
@@ -16,10 +18,18 @@ export default function Pagination ({count, currentPage, setPage}: TPagination) 
   const [lastPageIndex, setLastPageIndex] = useState(3);
   const pagesSlice = pagesArray.slice(firstPageIndex, lastPageIndex);
 
+  const [ , setSearchParams] = useSearchParams();
+
+
+  useEffect(() => {
+    setSearchParams({page: (currentPage).toString()});
+  }, [currentPage, setSearchParams]);
+
   const clickNextButton = () => {
     setFirstPageIndex(firstPageIndex + MAX_PAGES);
     setLastPageIndex(lastPageIndex + MAX_PAGES);
     setPage(firstPageIndex + MAX_PAGES + 1);
+
   };
 
   const clickPrevButton = () => {
@@ -27,6 +37,7 @@ export default function Pagination ({count, currentPage, setPage}: TPagination) 
     setFirstPageIndex(firstPageIndex - MAX_PAGES);
     setLastPageIndex(lastPageIndex - MAX_PAGES);
   };
+
 
   return (
     <div className="pagination">
@@ -36,7 +47,7 @@ export default function Pagination ({count, currentPage, setPage}: TPagination) 
           <PaginationPage
             page={item}
             currentPage={currentPage}
-            setPage={setPage}
+            onClick={setPage}
             key={item}
           />))}
         {(pagesArray[pagesArray.length - 1] > pagesSlice[pagesSlice.length - 1]) ? <ButtonPagination button="next" onClick={clickNextButton} /> : ''}
