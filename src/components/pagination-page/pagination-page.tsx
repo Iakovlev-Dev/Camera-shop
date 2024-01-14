@@ -2,17 +2,21 @@
 type TPaginationPage = {
     page: number;
     currentPage: number;
-    setPage: (arg: number) => void;
+    onClick: (arg: number) => void;
 }
 
-export default function PaginationPage ({page, currentPage, setPage}: TPaginationPage) {
+export default function PaginationPage ({page, currentPage, onClick}: TPaginationPage) {
+
+  const handleClickPage = (pageNumber: number) => {
+    onClick(pageNumber);
+  };
 
 
   return (
     <li className="pagination__item">
       <a
         className={currentPage === page ? 'pagination__link pagination__link--active' : 'pagination__link'}
-        onClick={() => setPage(page)}
+        onClick={() => handleClickPage(page)}
       >
         {page}
       </a>
