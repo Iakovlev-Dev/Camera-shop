@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { NameSpace } from '../../const';
 import { TCamera, TCameraArray } from '../../types/type-camera';
-import { fetchCardsAction, fetchPromoAction } from '../api-action';
+import { fetchCardAction, fetchCardsAction, fetchPromoAction } from '../api-action';
 import { TPromoArray } from '../../types/type-promo';
 
 export type TinitialStateDataCards = {
@@ -31,6 +31,9 @@ export const dataCardsProcess = createSlice({
       })
       .addCase(fetchPromoAction.fulfilled, (state, action) => {
         state.promo = action.payload;
+      })
+      .addCase(fetchCardAction.fulfilled, (state, action) => {
+        state.cardCurrent = action.payload;
       });
   },
 });
