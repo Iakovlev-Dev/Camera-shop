@@ -11,8 +11,8 @@ type TProduct = {
 export default function Product ({card, onClick}: TProduct) {
 
 
-  const [isActiveSpecs, setActiveSpecs] = useState(true);
-  const [isActiveDesc, setActiveDesc] = useState(false);
+  const [isActiveSpecs, setActiveSpecs] = useState(false);
+  const [isActiveDesc, setActiveDesc] = useState(true);
 
   const handleClick = () => {
     setActiveSpecs(!isActiveSpecs);
