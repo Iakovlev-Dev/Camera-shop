@@ -15,7 +15,7 @@ import PopupAddCameras from '../../components/popup-add-camera/popup-add-camera'
 
 const CARD_ON_PAGE = 9;
 
-type TEventKey = {
+export type TEventKey = {
   key: string;
   preventDefault: () => void;
 }
