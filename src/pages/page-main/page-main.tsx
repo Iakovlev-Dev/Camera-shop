@@ -12,6 +12,7 @@ import Banner from '../../components/banner/banner';
 import Pagination from '../../components/pagination/pagination';
 import { useEffect, useState } from 'react';
 import PopupAddCameras from '../../components/popup-add-camera/popup-add-camera';
+import { Helmet } from 'react-helmet-async';
 
 const CARD_ON_PAGE = 9;
 
@@ -60,6 +61,9 @@ export default function PageMain () {
 
   return (
     <div className="wrapper">
+      <Helmet>
+        <title>Фотошоп</title>
+      </Helmet>
       <Header />
       <main>
         <Banner />

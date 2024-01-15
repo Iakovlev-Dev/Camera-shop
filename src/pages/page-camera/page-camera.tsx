@@ -11,6 +11,7 @@ import { TEventKey } from '../page-main/page-main';
 import Breadcrumbs from '../../components/breadcrumbs/breadcrumbs';
 import Product from '../../components/product/product';
 import ProductReview from '../../components/product-review/product-review';
+import { Helmet } from 'react-helmet-async';
 
 
 export default function PageCamera () {
@@ -46,6 +47,9 @@ export default function PageCamera () {
 
   return (currentCard &&
     <div className="wrapper">
+      <Helmet>
+        <title>{currentCard.name}</title>
+      </Helmet>
       <Header />
       <main>
         <div className="page-content">
