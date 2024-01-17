@@ -7,6 +7,8 @@ import { Provider } from 'react-redux';
 
 store.dispatch(fetchCardsAction());
 store.dispatch(fetchPromoAction());
+console.log(store.getState());
+
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

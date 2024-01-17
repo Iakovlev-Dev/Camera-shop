@@ -13,12 +13,11 @@ import Product from '../../components/product/product';
 import ProductReview from '../../components/product-review/product-review';
 import { Helmet } from 'react-helmet-async';
 
-
 export default function PageCamera () {
   const {id} = useParams();
   const dispatch = useAppDispatch();
   const [isAdd, setIsAdd] = useState(false);
-  const currentCard = useAppSelector(selectCards).find((item) => item.id === Number(id));
+  const currentCard = useAppSelector(selectCards).find((item: { id: number }) => item.id === Number(id));
 
   useEffect(() => {
     if(id) {
