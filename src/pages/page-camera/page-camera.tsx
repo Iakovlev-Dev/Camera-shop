@@ -1,9 +1,9 @@
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { selectCardId } from '../../store/data-card-process/selectors';
+import { selectCards } from '../../store/data-card-process/selectors';
 import Header from '../../components/header/header';
 import ProductSimilar from '../../components/product-similar/product-similar';
 import { useEffect, useState } from 'react';
-import { fetchCardAction } from '../../store/api-action';
+import { fetchCardAction, fetchSimilarProductsAction } from '../../store/api-action';
 import { useParams } from 'react-router-dom';
 import Footer from '../../components/footer/footer';
 import PopupAddCameras from '../../components/popup-add-camera/popup-add-camera';
@@ -18,16 +18,19 @@ export default function PageCamera () {
   const {id} = useParams();
   const dispatch = useAppDispatch();
   const [isAdd, setIsAdd] = useState(false);
-  const currentCard = useAppSelector(selectCardId);
+  const currentCard = useAppSelector(selectCards).find((item) => item.id === Number(id));
 
   useEffect(() => {
-    dispatch(fetchCardAction(Number(id)));
+    if(id) {
+      dispatch(fetchSimilarProductsAction(id));
+    }
   }, [dispatch, id]);
 
 
-  const handleClickAdd = () => {
+  const handleClickAdd = (cardId: number) => {
     setIsAdd(true);
     document.body.classList.add('scroll-lock');
+    dispatch(fetchCardAction(cardId));
   };
   const handleCloseAdd = () => {
     setIsAdd(false);
