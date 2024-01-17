@@ -1,24 +1,27 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { NameSpace } from '../../const';
 import { TCamera, TCameraArray } from '../../types/type-camera';
-import { fetchCardAction, fetchCardsAction, fetchPromoAction } from '../api-action';
+import { fetchCardAction, fetchCardsAction, fetchPromoAction, fetchSimilarProductsAction } from '../api-action';
 import { TPromoArray } from '../../types/type-promo';
+import { TSimilarProductArray } from '../../types/type-similar-product';
 
 export type TinitialStateDataCards = {
-    cards: TCameraArray | null;
-    promo: TPromoArray | null;
+    cards: TCameraArray;
+    promo: TPromoArray;
     cardCurrent: TCamera | null;
+    similarProducts: TSimilarProductArray;
 }
 
-const initialStateDataCards: TinitialStateDataCards = {
-  cards: null,
-  promo: null,
-  cardCurrent: null
+const initialState: TinitialStateDataCards = {
+  cards: [],
+  promo: [],
+  cardCurrent: null,
+  similarProducts: []
 };
 
 export const dataCardsProcess = createSlice({
   name: NameSpace.DATA_CARDS,
-  initialState: initialStateDataCards,
+  initialState,
   reducers: {
     setCardId(state, action: PayloadAction<TCamera>) {
       state.cardCurrent = action.payload;
@@ -34,6 +37,9 @@ export const dataCardsProcess = createSlice({
       })
       .addCase(fetchCardAction.fulfilled, (state, action) => {
         state.cardCurrent = action.payload;
+      })
+      .addCase(fetchSimilarProductsAction.fulfilled, (state, action) => {
+        state.similarProducts = action.payload;
       });
   },
 });

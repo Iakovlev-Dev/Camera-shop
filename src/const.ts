@@ -41,7 +41,8 @@ export const SortBtn: SortBy<string> = {
 };
 
 export const NameSpace = {
-  DATA_CARDS: 'DATA_CARDS'
+  DATA_CARDS: 'DATA_CARDS',
+  PAGE_CAMERA: 'PAGE_CAMERA'
 };
 
 export const APIRoute = {

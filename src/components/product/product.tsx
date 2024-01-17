@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 type TProduct = {
     card: TCamera;
-    onClick: () => void;
+    onClick: (id: number) => void;
 }
 
 
@@ -27,11 +27,11 @@ export default function Product ({card, onClick}: TProduct) {
             <picture>
               <source
                 type="image/webp"
-                srcSet={card.previewImgWebp2x}
+                srcSet={`/${card.previewImgWebp && card.previewImgWebp2x} 2x`}
               />
               <img
-                src={card.previewImg}
-                srcSet={card.previewImg2x}
+                src={`/${card.previewImg}`}
+                srcSet={`/${card.previewImg2x} 2x`}
                 width={560}
                 height={480}
                 alt={card.name}
@@ -50,7 +50,7 @@ export default function Product ({card, onClick}: TProduct) {
             <p className="product__price">
               <span className="visually-hidden">Цена:</span>{card.price} ₽
             </p>
-            <button className="btn btn--purple" type="button" onClick={() => onClick()}>
+            <button className="btn btn--purple" type="button" onMouseDown={() => onClick(card.id)}>
               <svg width={24} height={16} aria-hidden="true">
                 <use xlinkHref="#icon-add-basket" />
               </svg>

@@ -28,11 +28,11 @@ export default function PopupAddCameras ({onClose}:TPopupAdd) {
               <picture>
                 <source
                   type="image/webp"
-                  srcSet={cardCurrent.previewImgWebp}
+                  srcSet={`/${cardCurrent.previewImgWebp && cardCurrent.previewImgWebp2x} 2x`}
                 />
                 <img
-                  src={cardCurrent.previewImg}
-                  srcSet={cardCurrent.previewImg2x}
+                  src={`/${cardCurrent.previewImg}`}
+                  srcSet={`/${cardCurrent.previewImg2x} 2x`}
                   width={140}
                   height={120}
                   alt={cardCurrent.name}

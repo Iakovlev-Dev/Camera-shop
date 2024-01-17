@@ -3,32 +3,40 @@ import { TCamera } from '../../types/type-camera';
 import CardRating from '../card-rating/card-rating';
 import { useAppDispatch } from '../../store/hooks';
 import { fetchCardAction } from '../../store/api-action';
+import classNames from 'classnames';
 
 type TCard = {
   card: TCamera;
   onClick: () => void;
+  active?: boolean;
 }
 
-export default function Card ({card, onClick}: TCard) {
+export default function Card ({card, onClick, active}: TCard) {
   const pathCard = `/cameras/${card.id}`;
   const dispatch = useAppDispatch();
 
   const handleClick = () => {
-    onClick();
     dispatch(fetchCardAction(card.id));
+    if(onClick) {
+      onClick();
+    }
   };
 
+  const productClass = classNames('product-card', {
+    'is-active': active,
+  });
+
   return (
-    <div className="product-card">
+    <div className={productClass}>
       <div className="product-card__img">
         <picture>
           <source
             type="image/webp"
-            srcSet={card.previewImgWebp}
+            srcSet={`/${card.previewImgWebp && card.previewImgWebp2x} 2x`}
           />
           <img
-            src={card.previewImg}
-            srcSet={card.previewImg2x}
+            src={`/${card.previewImg}`}
+            srcSet={`/${card.previewImg2x} 2x`}
             width={280}
             height={240}
             alt={card.name}
@@ -58,7 +66,7 @@ export default function Card ({card, onClick}: TCard) {
         >
         Купить
         </button>
-        <Link className="btn btn--transparent" to={pathCard}>
+        <Link className="btn btn--transparent" to={pathCard} >
         Подробнее
         </Link>
       </div>
