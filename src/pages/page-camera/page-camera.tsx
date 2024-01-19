@@ -3,7 +3,7 @@ import { selectCards } from '../../store/data-card-process/selectors';
 import Header from '../../components/header/header';
 import ProductSimilar from '../../components/product-similar/product-similar';
 import { useEffect, useState } from 'react';
-import { fetchCardAction, fetchSimilarProductsAction } from '../../store/api-action';
+import { fetchCardAction, fetchReviewsAction, fetchSimilarProductsAction } from '../../store/api-action';
 import { useParams } from 'react-router-dom';
 import Footer from '../../components/footer/footer';
 import PopupAddCameras from '../../components/popup-add-camera/popup-add-camera';
@@ -13,16 +13,16 @@ import Product from '../../components/product/product';
 import ProductReview from '../../components/product-review/product-review';
 import { Helmet } from 'react-helmet-async';
 
-
 export default function PageCamera () {
   const {id} = useParams();
   const dispatch = useAppDispatch();
   const [isAdd, setIsAdd] = useState(false);
-  const currentCard = useAppSelector(selectCards).find((item) => item.id === Number(id));
+  const currentCard = useAppSelector(selectCards).find((item: { id: number }) => item.id === Number(id));
 
   useEffect(() => {
     if(id) {
       dispatch(fetchSimilarProductsAction(id));
+      dispatch(fetchReviewsAction(id));
     }
   }, [dispatch, id]);
 

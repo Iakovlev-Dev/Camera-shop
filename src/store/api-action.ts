@@ -5,6 +5,7 @@ import { TCamera, TCameraArray } from '../types/type-camera';
 import { APIRoute } from '../const';
 import { TPromoArray } from '../types/type-promo';
 import { TSimilarProductArray } from '../types/type-similar-product';
+import { TReviewsArray } from '../types/type-reviews';
 
 
 type TAPIAction = {
@@ -39,3 +40,11 @@ export const fetchSimilarProductsAction = createAsyncThunk<TSimilarProductArray,
     return data;
   }
 );
+
+export const fetchReviewsAction = createAsyncThunk<TReviewsArray, string, TAPIAction>('fetchReviews',
+  async (id, {extra: api}) => {
+    const {data} = await api.get<TReviewsArray>(`${APIRoute.Cameras}/${id}/reviews`);
+    return data;
+  }
+);
+
