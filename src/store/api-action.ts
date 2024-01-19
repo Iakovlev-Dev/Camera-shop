@@ -41,7 +41,7 @@ export const fetchSimilarProductsAction = createAsyncThunk<TSimilarProductArray,
   }
 );
 
-export const fetchReviewsAction = createAsyncThunk<TReviewsArray, number, TAPIAction>('fetchReviews',
+export const fetchReviewsAction = createAsyncThunk<TReviewsArray, string, TAPIAction>('fetchReviews',
   async (id, {extra: api}) => {
     const {data} = await api.get<TReviewsArray>(`${APIRoute.Cameras}/${id}/reviews`);
     return data;

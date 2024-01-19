@@ -3,6 +3,5 @@ import { TState } from '../../types/type-store';
 
 
 export const selectCards = (state: TState) => state[NameSpace.DATA_CARDS].cards;
-export const selectPromo = (state: TState) => state[NameSpace.DATA_CARDS].promo;
 export const selectCardId = (state:TState) => state[NameSpace.DATA_CARDS].cardCurrent;
 export const selectSimilarProducts = (state: TState) => state[NameSpace.DATA_CARDS].similarProducts;

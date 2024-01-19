@@ -3,7 +3,7 @@ import { selectCards } from '../../store/data-card-process/selectors';
 import Header from '../../components/header/header';
 import ProductSimilar from '../../components/product-similar/product-similar';
 import { useEffect, useState } from 'react';
-import { fetchCardAction, fetchSimilarProductsAction } from '../../store/api-action';
+import { fetchCardAction, fetchReviewsAction, fetchSimilarProductsAction } from '../../store/api-action';
 import { useParams } from 'react-router-dom';
 import Footer from '../../components/footer/footer';
 import PopupAddCameras from '../../components/popup-add-camera/popup-add-camera';
@@ -22,6 +22,7 @@ export default function PageCamera () {
   useEffect(() => {
     if(id) {
       dispatch(fetchSimilarProductsAction(id));
+      dispatch(fetchReviewsAction(id));
     }
   }, [dispatch, id]);
 
