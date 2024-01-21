@@ -41,6 +41,7 @@ export default function PageCamera () {
     const handleClickEsc = (evt: TEventKey) => {
       if (evt.key === 'Escape') {
         setIsAdd(false);
+        document.body.classList.remove('scroll-lock');
       }
     };
     document.addEventListener('keydown', handleClickEsc);

@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { selectSimilarProducts } from '../../store/data-card-process/selectors';
 import { useAppSelector } from '../../store/hooks';
 import Card from '../card/card';
 import PopupAddCameras from '../popup-add-camera/popup-add-camera';
+import { TEventKey } from '../../pages/page-main/page-main';
 
 const MAX_SIMILAR_PRODUCTS = 3;
 
@@ -10,21 +11,39 @@ export default function ProductSimilar() {
   const similarProducts = useAppSelector(selectSimilarProducts);
   const [isOpenPopup, setActive] = useState(false);
   const [firstIndexSimilar, setFirstIndexSimilar] = useState(0);
-  const [lastIndexSimilar, setLastIndexSimilar] = useState(3);
+  const [lastIndexSimilar, setLastIndexSimilar] = useState(MAX_SIMILAR_PRODUCTS);
+
+  const handleOpenPopup = () => {
+    setActive(true);
+    document.body.classList.add('scroll-lock');
+  };
+
+  const handleClosePopup = () => {
+    setActive(false);
+    document.body.classList.remove('scroll-lock');
+  };
+
+  useEffect(() => {
+    const handleClickEsc = (evt: TEventKey) => {
+      if(evt.key === 'Escape') {
+        setActive(false);
+        document.body.classList.remove('scroll-lock');
+      }
+    };
+    document.addEventListener('keydown', handleClickEsc);
+    return () => document.removeEventListener('keydown', handleClickEsc);
+  }, [setActive]);
+
+  useEffect(() => {
+    setFirstIndexSimilar(0);
+    setLastIndexSimilar(MAX_SIMILAR_PRODUCTS);
+  }, [similarProducts]);
 
   if(!similarProducts) {
     return;
   }
 
   const similarProductsSliced = similarProducts.slice(firstIndexSimilar, lastIndexSimilar);
-
-  const handleOpenPopup = () => {
-    setActive(true);
-  };
-
-  const handleClosePopup = () => {
-    setActive(false);
-  };
 
   const handleNextButton = () => {
     setFirstIndexSimilar(firstIndexSimilar + MAX_SIMILAR_PRODUCTS);

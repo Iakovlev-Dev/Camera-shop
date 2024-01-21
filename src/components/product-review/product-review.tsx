@@ -3,6 +3,8 @@ import { useAppSelector } from '../../store/hooks';
 import { selectReviews } from '../../store/reviews-process/selectors';
 import ProductReviewCard from '../product-review-card/product-review-card';
 import ProductReviewButton from '../product-review-button/product-review-button';
+import ProductReviewModal from '../product-review-add/product-review-add';
+import { TEventKey } from '../../pages/page-main/page-main';
 
 
 export default function ProductReview () {
@@ -17,6 +19,29 @@ export default function ProductReview () {
     setLastIndex(3);
   }, [reviews]);
 
+  const [isOpenModal, setOpenModal] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpenModal(true);
+    document.body.classList.add('scroll-lock');
+  };
+
+  const handleClickClose = () => {
+    setOpenModal(false);
+    document.body.classList.remove('scroll-lock');
+  };
+
+  useEffect(() => {
+    const handleClickEsc = (evt: TEventKey) => {
+      if(evt.key === 'Escape') {
+        setOpenModal(false);
+        document.body.classList.remove('scroll-lock');
+      }
+    };
+    document.addEventListener('keydown', handleClickEsc);
+    return () => document.removeEventListener('keydown', handleClickEsc);
+  }, [setOpenModal]);
+
 
   return (
     <div className="page-content__section">
@@ -24,7 +49,7 @@ export default function ProductReview () {
         <div className="container">
           <div className="page-content__headed">
             <h2 className="title title--h3">Отзывы</h2>
-            <button className="btn" type="button">
+            <button className="btn" type="button" onClick={handleClickOpen}>
                 Оставить свой отзыв
             </button>
           </div>
@@ -34,6 +59,7 @@ export default function ProductReview () {
           {reviews.length > reviewSlice.length ? <ProductReviewButton onClick={handleClickReview}/> : ''}
         </div>
       </section>
+      {isOpenModal && <ProductReviewModal onClose={handleClickClose}/>}
     </div>
   );
 }

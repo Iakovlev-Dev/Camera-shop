@@ -46,6 +46,7 @@ export default function PageMain () {
     const handleClickEsc = (evt: TEventKey) => {
       if (evt.key === 'Escape') {
         setOpenModal(false);
+        document.body.classList.remove('scroll-lock');
       }
     };
     document.addEventListener('keydown', handleClickEsc);
