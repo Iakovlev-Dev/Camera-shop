@@ -1,16 +1,28 @@
+import { useFormContext } from 'react-hook-form';
 import { Rating, RatingNumb } from '../const';
 
-export default function ProductReviewRating () {
+type TProductReviewRating = {
+  onChange: (value: number) => void;
+}
+
+export default function ProductReviewRating ({onChange}: TProductReviewRating) {
+
+  const { register } = useFormContext();
   return (
     <div className="rate__group">
       {Object.keys(Rating).map((item) => (
         <>
           <input
+            {...register('rating', {
+              required: 'Нужно оценить товар'
+            })}
             className="visually-hidden"
             id={`star-${RatingNumb[item]}`}
             name="rate"
             type="radio"
-            defaultValue={RatingNumb[item]}
+            value={RatingNumb[item]}
+            key={Number(RatingNumb[item]) + 100}
+            onChange={() => onChange(Number(RatingNumb[item]))}
           />
           <label
             className="rate__label"

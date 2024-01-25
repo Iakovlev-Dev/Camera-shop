@@ -52,7 +52,8 @@ export const NameSpace = {
 
 export const APIRoute = {
   Cameras: '/cameras',
-  Promo: '/promo'
+  Promo: '/promo',
+  Post: '/reviews'
 };
 
 export const Rating: Rating<string> = {
