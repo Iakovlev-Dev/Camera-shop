@@ -7,12 +7,13 @@ import SortingBtn from '../../components/sorting-btn/sorting-btn';
 import Footer from '../../components/footer/footer';
 import Card from '../../components/card/card';
 import { useAppSelector } from '../../store/hooks';
-import { selectCards } from '../../store/data-card-process/selectors';
+import { selectCards, selectLoadingStatusRejected } from '../../store/data-card-process/selectors';
 import Banner from '../../components/banner/banner';
 import Pagination from '../../components/pagination/pagination';
 import { useEffect, useState } from 'react';
 import PopupAddCameras from '../../components/popup-add-camera/popup-add-camera';
 import { Helmet } from 'react-helmet-async';
+
 
 const CARD_ON_PAGE = 9;
 
@@ -29,6 +30,7 @@ export default function PageMain () {
   const currentCardPage = cards?.slice(firstCardIndex, lastCardIndex);
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+  const isLoadingStatusRejected = useAppSelector(selectLoadingStatusRejected);
 
   const [isOpenModal, setOpenModal] = useState(false);
 
@@ -46,12 +48,12 @@ export default function PageMain () {
     const handleClickEsc = (evt: TEventKey) => {
       if (evt.key === 'Escape') {
         setOpenModal(false);
+        document.body.classList.remove('scroll-lock');
       }
     };
     document.addEventListener('keydown', handleClickEsc);
     return () => document.removeEventListener('keydown', handleClickEsc);
   }, [isOpenModal]);
-
 
   if(!cards) {
     return;
@@ -157,6 +159,7 @@ export default function PageMain () {
                           card={item}
                           onClick={() => handleOpenModal()}
                         />))}
+                    {isLoadingStatusRejected ? 'Нет подключение к серверу' : ''}
                   </div>
                   <Pagination count={countPages} currentPage={currentPage} setPage={paginate}/>
                 </div>

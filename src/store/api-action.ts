@@ -6,6 +6,7 @@ import { APIRoute } from '../const';
 import { TPromoArray } from '../types/type-promo';
 import { TSimilarProductArray } from '../types/type-similar-product';
 import { TReviewsArray } from '../types/type-reviews';
+import { TFormFielsRequest, TFormFielsResponse } from '../components/product-review-form/product-review-form';
 
 
 type TAPIAction = {
@@ -48,3 +49,9 @@ export const fetchReviewsAction = createAsyncThunk<TReviewsArray, string, TAPIAc
   }
 );
 
+export const postReviewAction = createAsyncThunk<TFormFielsResponse, TFormFielsRequest, TAPIAction>('postReview',
+  async (body, {extra: api}) => {
+    const {data} = await api.post<TFormFielsResponse>(`${APIRoute.Post}`, body);
+    return data;
+  }
+);
