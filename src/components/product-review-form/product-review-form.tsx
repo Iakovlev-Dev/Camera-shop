@@ -101,6 +101,7 @@ export default function ProductReviewForm ({onClose}: TProductReviewForm) {
                   minLength: 2,
                   maxLength: 15
                 })}
+                autoFocus
                 type = 'text'
                 placeholder = 'Введите ваше имя'
 
