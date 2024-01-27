@@ -10,13 +10,17 @@ export type TinitialStateDataCards = {
     promo: TPromoArray;
     cardCurrent: TCamera | null;
     similarProducts: TSimilarProductArray;
+    isLoadingData: boolean;
+    isLoadibgDataRejected: boolean;
 }
 
 const initialState: TinitialStateDataCards = {
   cards: [],
   promo: [],
   cardCurrent: null,
-  similarProducts: []
+  similarProducts: [],
+  isLoadingData: false,
+  isLoadibgDataRejected: false
 };
 
 export const dataCardsProcess = createSlice({
@@ -31,6 +35,14 @@ export const dataCardsProcess = createSlice({
     builder
       .addCase(fetchCardsAction.fulfilled, (state, action) => {
         state.cards = action.payload;
+        state.isLoadingData = false;
+      })
+      .addCase(fetchCardsAction.rejected, (state) => {
+        state.isLoadingData = false;
+        state.isLoadibgDataRejected = true;
+      })
+      .addCase(fetchCardsAction.pending, (state) => {
+        state.isLoadingData = true;
       })
       .addCase(fetchCardAction.fulfilled, (state, action) => {
         state.cardCurrent = action.payload;

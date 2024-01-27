@@ -14,8 +14,8 @@ export default function ProductReview () {
   const handleClickReview = (numb: number) => {
     setLastIndex(numb + lastIndex);
   };
-  console.log(reviews);
-  
+  // console.log(reviews);
+
   useEffect(()=> {
     setLastIndex(3);
   }, [reviews]);

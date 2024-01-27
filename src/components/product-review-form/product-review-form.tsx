@@ -2,9 +2,9 @@ import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import ProductReviewRating from '../../product-review-rating/product-review-rating';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useAppDispatch } from '../../store/hooks';
-import { fetchReviewsAction, postReviewAction } from '../../store/api-action';
+import { postReviewAction } from '../../store/api-action';
 
 export type TFormFielsRequest = {
   cameraId: number;
@@ -58,16 +58,11 @@ export default function ProductReviewForm ({onClose}: TProductReviewForm) {
     };
 
     reset();
-    // setRatingStars(0);
+    setRatingStars(0);
     dispatch(postReviewAction(body));
     onClose();
-    dispatch(fetchReviewsAction(id as string));
+
   };
-
-  useEffect(() => {
-    dispatch(fetchReviewsAction(id as string));
-  }, [dispatch, id]);
-
 
   return (
     <FormProvider {...methods}>

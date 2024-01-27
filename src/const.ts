@@ -72,3 +72,9 @@ export const RatingNumb: Rating<string> = {
   Good: '4',
   Perfect: '5',
 };
+
+export const LoadingDataStatus = {
+  Unsent: 'UNSENT',
+  Pending: 'PENDING',
+  Success: 'SUCCESS'
+};

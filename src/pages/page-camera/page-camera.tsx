@@ -12,12 +12,18 @@ import Breadcrumbs from '../../components/breadcrumbs/breadcrumbs';
 import Product from '../../components/product/product';
 import ProductReview from '../../components/product-review/product-review';
 import { Helmet } from 'react-helmet-async';
+import { selectPostSuccess, selectSendingStatus } from '../../store/reviews-process/selectors';
+import { LoadingDataStatus } from '../../const';
+import { setSendingStatus } from '../../store/reviews-process/review-process';
+import ProductReviewSuccess from '../../components/product-review-success/product-review-success';
 
 export default function PageCamera () {
   const {id} = useParams();
   const dispatch = useAppDispatch();
   const [isAdd, setIsAdd] = useState(false);
   const currentCard = useAppSelector(selectCards).find((item: { id: number }) => item.id === Number(id));
+  const sendingStatus = useAppSelector(selectSendingStatus);
+  const isPostReview = useAppSelector(selectPostSuccess);
 
   useEffect(() => {
     if(id) {
@@ -25,6 +31,17 @@ export default function PageCamera () {
       dispatch(fetchReviewsAction(id));
     }
   }, [dispatch, id]);
+
+  useEffect(() => {
+    if(id) {
+      switch (sendingStatus) {
+        case LoadingDataStatus.Success:
+          dispatch(setSendingStatus(LoadingDataStatus.Unsent));
+          dispatch(fetchReviewsAction(id));
+      }
+    }
+
+  }, [dispatch, id, sendingStatus]);
 
 
   const handleClickAdd = (cardId: number) => {
@@ -63,6 +80,7 @@ export default function PageCamera () {
           <ProductReview />
         </div>
         {isAdd && <PopupAddCameras onClose={handleCloseAdd}/>}
+        {isPostReview && <ProductReviewSuccess />}
       </main>
       <a className="up-btn" href="#header">
         <svg width={12} height={18} aria-hidden="true">

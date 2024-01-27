@@ -21,7 +21,7 @@ export default function ProductReviewRating ({onChange}: TProductReviewRating) {
             name="rate"
             type="radio"
             value={RatingNumb[item]}
-            key={Number(RatingNumb[item]) + 100}
+            key={item}
             onChange={() => onChange(Number(RatingNumb[item]))}
           />
           <label
