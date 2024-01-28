@@ -5,22 +5,24 @@ import ProductReviewCard from '../product-review-card/product-review-card';
 import ProductReviewButton from '../product-review-button/product-review-button';
 import ProductReviewModal from '../product-review-add/product-review-add';
 import { TEventKey } from '../../pages/page-main/page-main';
-
+import { sortReview } from '../../utils';
 
 export default function ProductReview () {
   const reviews = useAppSelector(selectReviews);
   const [lastIndex, setLastIndex] = useState(3);
-  const reviewSlice = reviews.slice(0, lastIndex);
+
   const handleClickReview = (numb: number) => {
     setLastIndex(numb + lastIndex);
   };
-  // console.log(reviews);
 
   useEffect(()=> {
     setLastIndex(3);
   }, [reviews]);
 
   const [isOpenModal, setOpenModal] = useState(false);
+
+  const sortedReviews = [...reviews].sort(sortReview);
+  const reviewSlice = sortedReviews.slice(0, lastIndex);
 
   const handleClickOpen = () => {
     setOpenModal(true);
