@@ -1,6 +1,6 @@
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
-import ProductReviewRating from '../../product-review-rating/product-review-rating';
+import ProductReviewRating from '../product-review-rating/product-review-rating';
 
 import { useState } from 'react';
 import { useAppDispatch } from '../../store/hooks';

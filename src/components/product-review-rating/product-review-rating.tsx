@@ -1,5 +1,5 @@
 import { useFormContext } from 'react-hook-form';
-import { Rating, RatingNumb } from '../const';
+import { Rating, RatingNumb } from '../../const';
 
 type TProductReviewRating = {
   onChange: (value: number) => void;
