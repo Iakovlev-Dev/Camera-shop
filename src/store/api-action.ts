@@ -35,14 +35,14 @@ export const fetchCardAction = createAsyncThunk<TCamera, number, TAPIAction>('fe
     return data;
   }
 );
-export const fetchSimilarProductsAction = createAsyncThunk<TSimilarProductArray, string, TAPIAction>('fetchSimilarProducts',
+export const fetchSimilarProductsAction = createAsyncThunk<TSimilarProductArray, number, TAPIAction>('fetchSimilarProducts',
   async (id, {extra: api}) => {
     const {data} = await api.get<TSimilarProductArray>(`${APIRoute.Cameras}/${id}/similar`);
     return data;
   }
 );
 
-export const fetchReviewsAction = createAsyncThunk<TReviewsArray, string, TAPIAction>('fetchReviews',
+export const fetchReviewsAction = createAsyncThunk<TReviewsArray, number, TAPIAction>('fetchReviews',
   async (id, {extra: api}) => {
     const {data} = await api.get<TReviewsArray>(`${APIRoute.Cameras}/${id}/reviews`);
     return data;

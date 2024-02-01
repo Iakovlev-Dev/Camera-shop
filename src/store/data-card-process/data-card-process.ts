@@ -1,11 +1,11 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { NameSpace } from '../../const';
-import { TCamera, TCameraArray } from '../../types/type-camera';
+import { TCamera } from '../../types/type-camera';
 import { fetchCardAction, fetchCardsAction, fetchSimilarProductsAction } from '../api-action';
 import { TSimilarProductArray } from '../../types/type-similar-product';
 
 export type TinitialStateDataCards = {
-    cards: TCameraArray;
+    cards: TCamera [];
     cardCurrent: TCamera | null;
     similarProducts: TSimilarProductArray;
     isLoadingData: boolean;

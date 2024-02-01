@@ -1,3 +1,4 @@
+import { TFormFielsRequest, TFormFielsResponse } from '../components/product-review-form/product-review-form';
 import { LoadingDataStatus } from '../const';
 import { TCamera } from '../types/type-camera';
 import { TPromo } from '../types/type-promo';
@@ -54,8 +55,28 @@ export const makeFakeReview = (): TReviews => ({
   createAt: faker.lorem.word(),
   cameraId: faker.datatype.number(),
   userName: faker.name.findName(),
-  advantage: faker.lorem.word(),
-  disadvantage: faker.lorem.word(),
+  advantage: faker.lorem.sentence(),
+  disadvantage: faker.lorem.sentence(),
+  review: faker.lorem.paragraph(),
+  rating: faker.datatype.number({max: 5}),
+});
+
+export const makeFakeReviewPostResponse = (): TFormFielsResponse => ({
+  id: faker.lorem.word(),
+  createAt: faker.lorem.word(),
+  cameraId: faker.datatype.number(),
+  userName: faker.name.findName(),
+  advantage: faker.lorem.sentence(),
+  disadvantage: faker.lorem.sentence(),
+  review: faker.lorem.paragraph(),
+  rating: faker.datatype.number({max: 5}),
+});
+
+export const makeFakeReviewPostRequest = (): TFormFielsRequest => ({
+  cameraId: faker.datatype.number(),
+  userName: faker.name.findName(),
+  advantage: faker.lorem.sentence(),
+  disadvantage: faker.lorem.sentence(),
   review: faker.lorem.paragraph(),
   rating: faker.datatype.number({max: 5}),
 });

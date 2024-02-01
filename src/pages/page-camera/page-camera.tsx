@@ -27,8 +27,8 @@ export default function PageCamera () {
 
   useEffect(() => {
     if(id) {
-      dispatch(fetchSimilarProductsAction(id));
-      dispatch(fetchReviewsAction(id));
+      dispatch(fetchSimilarProductsAction(Number(id)));
+      dispatch(fetchReviewsAction(Number(id)));
     }
   }, [dispatch, id]);
 
@@ -37,7 +37,7 @@ export default function PageCamera () {
       switch (sendingStatus) {
         case LoadingDataStatus.Success:
           dispatch(setSendingStatus(LoadingDataStatus.Unsent));
-          dispatch(fetchReviewsAction(id));
+          dispatch(fetchReviewsAction(Number(id)));
       }
     }
 
