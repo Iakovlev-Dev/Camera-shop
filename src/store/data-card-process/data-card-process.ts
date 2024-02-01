@@ -2,12 +2,10 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { NameSpace } from '../../const';
 import { TCamera, TCameraArray } from '../../types/type-camera';
 import { fetchCardAction, fetchCardsAction, fetchSimilarProductsAction } from '../api-action';
-import { TPromoArray } from '../../types/type-promo';
 import { TSimilarProductArray } from '../../types/type-similar-product';
 
 export type TinitialStateDataCards = {
     cards: TCameraArray;
-    promo: TPromoArray;
     cardCurrent: TCamera | null;
     similarProducts: TSimilarProductArray;
     isLoadingData: boolean;
@@ -16,7 +14,6 @@ export type TinitialStateDataCards = {
 
 const initialState: TinitialStateDataCards = {
   cards: [],
-  promo: [],
   cardCurrent: null,
   similarProducts: [],
   isLoadingData: false,

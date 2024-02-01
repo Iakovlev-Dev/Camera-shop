@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { TPromoArray } from '../../types/type-promo';
+import { TPromo } from '../../types/type-promo';
 import { NameSpace } from '../../const';
 import { fetchPromoAction } from '../api-action';
 
 export type TPromoProcess = {
-    promo: TPromoArray | null;
+    promo: TPromo[] | null;
 }
 
 const initialState: TPromoProcess = {
