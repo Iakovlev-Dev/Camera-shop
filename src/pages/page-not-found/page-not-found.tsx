@@ -1,3 +1,6 @@
+import { Link } from 'react-router-dom';
+import { AppRoute } from '../../const';
+
 export default function PageNotFound () {
   return (
     <div className="wrapper">
@@ -90,6 +93,7 @@ export default function PageNotFound () {
         <section className="catalog">
           <div className="container">
             <h1 className="title title--h2">Страница не найдена</h1>
+            <Link to={AppRoute.Main}>Вернуться на главную страницу</Link>
           </div>
         </section>
 
