@@ -1,3 +1,4 @@
+import { Action, ThunkDispatch } from '@reduxjs/toolkit';
 import { TFormFielsRequest, TFormFielsResponse } from '../components/product-review-form/product-review-form';
 import { LoadingDataStatus } from '../const';
 import { TCamera } from '../types/type-camera';
@@ -5,6 +6,11 @@ import { TPromo } from '../types/type-promo';
 import { TReviews } from '../types/type-reviews';
 import { TState } from '../types/type-store';
 import * as faker from 'faker';
+import { createAPI } from '../services/api';
+
+export type AppThunkDispatch = ThunkDispatch<TState, ReturnType<typeof createAPI>, Action>
+
+export const extraActionsTypes = (actions: Action<string>[]) => actions.map(({type}) => type);
 
 export const makeFakeStore = (initialState: Partial<TState>) => ({
   DATA_CARDS: {
