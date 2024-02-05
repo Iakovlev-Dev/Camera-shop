@@ -4,7 +4,7 @@ export default function FilterByType () {
   return (
     <>
       {Object.keys(FilterType).map((item) => (
-        <div className="custom-checkbox catalog-filter__item" key={item}>
+        <div className="custom-checkbox catalog-filter__item" key={item} data-testid='filter-type'>
           <label>
             <input
               type="checkbox"

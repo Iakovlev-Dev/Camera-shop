@@ -1,10 +1,10 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { TReviewsArray } from '../../types/type-reviews';
+import { TReviews, TReviewsArray } from '../../types/type-reviews';
 import { LoadingDataStatus, NameSpace } from '../../const';
 import { fetchReviewsAction, postReviewAction } from '../api-action';
 
 export type TReviewsProcess = {
-    reviews: TReviewsArray | [];
+    reviews: TReviewsArray | [] | TReviews[];
     reviewSendingStatus: string;
     isPostSuccess: boolean;
 }

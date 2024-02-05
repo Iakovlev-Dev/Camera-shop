@@ -4,7 +4,7 @@ export default function FilterByCategory () {
   return (
     <>
       {Object.keys(FilterCategory).map((item) => (
-        <div className="custom-checkbox catalog-filter__item" key={item}>
+        <div className="custom-checkbox catalog-filter__item" key={item} data-testid='filter-item'>
           <label>
             <input
               type="checkbox"

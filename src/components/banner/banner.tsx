@@ -24,9 +24,10 @@ export default function Banner () {
       navigation
       modules={[Autoplay, Pagination, Navigation]}
       className="mySwiper"
+      data-testid='banner'
     >
       {promo.map((item) => (
-        <SwiperSlide key={item.id}>
+        <SwiperSlide key={item.id} data-testid='banner-item'>
           <Promo promo={item} />
         </SwiperSlide>
       ))}

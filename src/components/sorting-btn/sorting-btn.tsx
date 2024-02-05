@@ -4,7 +4,7 @@ export default function SortingBtn () {
   return (
     <>
       {Object.keys(SortBtn).map((item) => (
-        <div className={`catalog-sort__btn catalog-sort__btn--${item}`} key={item}>
+        <div className={`catalog-sort__btn catalog-sort__btn--${item}`} key={item} data-testid='sorting-btn'>
           <input
             type="radio"
             id={item}

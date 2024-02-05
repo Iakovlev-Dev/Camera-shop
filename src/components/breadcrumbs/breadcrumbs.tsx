@@ -8,7 +8,7 @@ type TBreadcrumbs = {
 
 export default function Breadcrumbs ({card}: TBreadcrumbs) {
   return (card &&
-    <div className="breadcrumbs">
+    <div className="breadcrumbs" data-testid='breadcrumbs-container'>
       <div className="container">
         <ul className="breadcrumbs__list">
           <li className="breadcrumbs__item">

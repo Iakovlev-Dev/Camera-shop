@@ -56,7 +56,7 @@ export default function ProductSimilar() {
   };
 
   return (
-    <div className="page-content__section">
+    <div className="page-content__section" data-testid='product-similar'>
       <section className="product-similar">
         <div className="container">
           <h2 className="title title--h3">Похожие товары</h2>

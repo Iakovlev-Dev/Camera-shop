@@ -9,7 +9,7 @@ type TProductReviewCard = {
 export default function ProductReviewCard ({review}: TProductReviewCard) {
 
   return (
-    <li className="review-card">
+    <li className="review-card" data-testid='review-card'>
       <div className="review-card__head">
         <p className="title title--h4">{review.userName}</p>
         <time className="review-card__data" dateTime={review.createAt}>

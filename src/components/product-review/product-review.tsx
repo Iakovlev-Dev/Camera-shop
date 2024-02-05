@@ -3,7 +3,7 @@ import { useAppSelector } from '../../store/hooks';
 import { selectReviews } from '../../store/reviews-process/selectors';
 import ProductReviewCard from '../product-review-card/product-review-card';
 import ProductReviewButton from '../product-review-button/product-review-button';
-import ProductReviewModal from '../product-review-add/product-review-add';
+import ProductReviewModal from '../product-review-modal/product-review-modal';
 import { TEventKey } from '../../pages/page-main/page-main';
 import { sortReview } from '../../utils';
 

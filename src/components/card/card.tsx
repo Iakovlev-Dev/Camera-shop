@@ -27,7 +27,7 @@ export default function Card ({card, onClick, active}: TCard) {
   });
 
   return (
-    <div className={productClass}>
+    <div className={productClass} data-testid='product=card'>
       <div className="product-card__img">
         <picture>
           <source

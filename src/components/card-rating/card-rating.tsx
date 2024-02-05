@@ -7,14 +7,14 @@ export default function CardRating ({count}: TCardRating) {
     const rating = [];
     for (let i = 1; i <= number; i++) {
       rating.push(
-        <svg width={17} height={16} aria-hidden="true" key={i}>
+        <svg width={17} height={16} aria-hidden="true" key={i} >
           <use xlinkHref="#icon-full-star" />
         </svg>
       );
     }
     for (let i = 5; i > number; i--) {
       rating.push(
-        <svg width={17} height={16} aria-hidden="true" key={i}>
+        <svg width={17} height={16} aria-hidden="true" key={i} >
           <use xlinkHref="#icon-star" />
         </svg>
       );
@@ -23,6 +23,8 @@ export default function CardRating ({count}: TCardRating) {
   };
 
   return (
-    setFullStars(count)
+    <div data-testid='card-rating'>
+      {setFullStars(count)}
+    </div>
   );
 }
