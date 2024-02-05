@@ -40,7 +40,7 @@ export default function Pagination ({count, currentPage, setPage}: TPagination) 
 
 
   return (
-    <div className="pagination">
+    <div className="pagination" data-testid='pagination'>
       <ul className="pagination__list">
         {currentPage > MAX_PAGES ? <ButtonPagination button="prev" onClick={clickPrevButton} /> : ''}
         {pagesSlice.map((item) => (

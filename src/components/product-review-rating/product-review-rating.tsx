@@ -9,7 +9,7 @@ export default function ProductReviewRating ({onChange}: TProductReviewRating) {
 
   const { register } = useFormContext();
   return (
-    <div className="rate__group">
+    <div className="rate__group" data-testid='rate__group'>
       {Object.keys(Rating).map((item) => (
         <>
           <input

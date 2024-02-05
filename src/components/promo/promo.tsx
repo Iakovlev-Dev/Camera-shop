@@ -13,8 +13,8 @@ export default function Promo ({promo}: TPromoProps) {
   const currentCamera = cards?.find((item) => promo.id === item.id);
   const pathCard = `/cameras/${promo.id}`;
 
-  return (currentCamera &&
-    <div className="banner">
+  return (cards &&
+    <div className="banner" data-testid='promo'>
       <picture>
         <source
           type="image/webp"
@@ -34,7 +34,7 @@ export default function Promo ({promo}: TPromoProps) {
           {promo.name}
         </span>
         <span className="banner__text">
-          {currentCamera.description}
+          {currentCamera?.description}
         </span>
         <Link className="btn" to={pathCard}>
           Подробнее
