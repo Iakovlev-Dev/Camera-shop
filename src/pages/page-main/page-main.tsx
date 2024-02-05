@@ -56,7 +56,10 @@ export default function PageMain () {
   }, [isOpenModal]);
 
   if(!cards) {
-    return;
+    return (
+      <>
+      </>
+    );
   }
 
   const countPages = Math.ceil(cards.length / CARD_ON_PAGE);

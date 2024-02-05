@@ -65,11 +65,18 @@ export default function PageCamera () {
     return () => document.removeEventListener('keydown', handleClickEsc);
   }, [setIsAdd]);
 
+  if(!currentCard) {
+    return (
+      <>
+      </>
+    );
+  }
 
-  return (currentCard &&
+
+  return (
     <div className="wrapper">
       <Helmet>
-        <title>{currentCard.name}</title>
+        <title>{currentCard?.name}</title>
       </Helmet>
       <Header />
       <main>

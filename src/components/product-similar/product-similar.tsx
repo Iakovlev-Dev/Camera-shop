@@ -39,9 +39,6 @@ export default function ProductSimilar() {
     setLastIndexSimilar(MAX_SIMILAR_PRODUCTS);
   }, [similarProducts]);
 
-  if(!similarProducts) {
-    return;
-  }
 
   const similarProductsSliced = similarProducts.slice(firstIndexSimilar, lastIndexSimilar);
 
