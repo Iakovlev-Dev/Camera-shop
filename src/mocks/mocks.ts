@@ -1,6 +1,5 @@
 import { Action, ThunkDispatch } from '@reduxjs/toolkit';
 import { TFormFielsRequest, TFormFielsResponse } from '../components/product-review-form/product-review-form';
-import { LoadingDataStatus } from '../const';
 import { TCamera } from '../types/type-camera';
 import { TPromo } from '../types/type-promo';
 import { TReviews } from '../types/type-reviews';
@@ -24,7 +23,6 @@ export const makeFakeStore = (initialState: Partial<TState>) => ({
   PROMO: {promo: null},
   REVIEW: {
     reviews: [],
-    reviewSendingStatus: LoadingDataStatus.Unsent,
     isPostSuccess: false,
   },
   ...initialState ?? {}

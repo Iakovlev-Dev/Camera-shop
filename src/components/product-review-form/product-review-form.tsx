@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { useAppDispatch } from '../../store/hooks';
 import { postReviewAction } from '../../store/api-action';
 
+
 export type TFormFielsRequest = {
   cameraId: number;
   userName: string;
@@ -61,7 +62,6 @@ export default function ProductReviewForm ({onClose}: TProductReviewForm) {
     setRatingStars(0);
     dispatch(postReviewAction(body));
     onClose();
-
   };
 
   return (

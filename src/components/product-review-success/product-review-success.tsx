@@ -20,6 +20,7 @@ export default function ProductReviewSuccess () {
         document.body.classList.remove('scroll-lock');
       }
     };
+    document.body.classList.add('scroll-lock');
     document.addEventListener('keydown', handleClickEsc);
     return () => document.removeEventListener('keydown', handleClickEsc);
   }, [dispatch, isPostSuccess]);

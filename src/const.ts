@@ -73,8 +73,9 @@ export const RatingNumb: Rating<string> = {
   Perfect: '5',
 };
 
-export const LoadingDataStatus = {
-  Unsent: 'UNSENT',
-  Pending: 'PENDING',
-  Success: 'SUCCESS'
-};
+export const MIN_COUNT_STARS = 1;
+export const MAX_COUNT_STARS = 5;
+export const MAX_PAGES = 3;
+export const MAX_REVIEW = 3;
+export const MAX_SIMILAR_PRODUCTS = 3;
+export const CARD_ON_PAGE = 9;

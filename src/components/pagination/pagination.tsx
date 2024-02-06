@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import ButtonPagination from '../pagination-button-prev/pagination-button-prev';
 import PaginationPage from '../pagination-page/pagination-page';
 import { useSearchParams } from 'react-router-dom';
+import { MAX_PAGES } from '../../const';
 
 
 type TPagination = {
@@ -9,8 +10,6 @@ type TPagination = {
     currentPage: number;
     setPage: (arg: number) => void;
 }
-
-const MAX_PAGES = 3;
 
 export default function Pagination ({count, currentPage, setPage}: TPagination) {
   const pagesArray = Array.from({length: count}, (_v, k: number) => k + 1);

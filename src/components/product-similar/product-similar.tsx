@@ -4,8 +4,7 @@ import { useAppSelector } from '../../store/hooks';
 import Card from '../card/card';
 import PopupAddCameras from '../popup-add-camera/popup-add-camera';
 import { TEventKey } from '../../pages/page-main/page-main';
-
-const MAX_SIMILAR_PRODUCTS = 3;
+import { MAX_SIMILAR_PRODUCTS } from '../../const';
 
 export default function ProductSimilar() {
   const similarProducts = useAppSelector(selectSimilarProducts);

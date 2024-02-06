@@ -1,7 +1,9 @@
+import { MAX_REVIEW } from '../../const';
+
 type TProductReviewButton = {
     onClick: (numb: number) => void;
 }
-const MAX_REVIEW = 3;
+
 
 export default function ProductReviewButton ({onClick}: TProductReviewButton) {
 

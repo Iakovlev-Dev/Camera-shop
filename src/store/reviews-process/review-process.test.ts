@@ -1,14 +1,12 @@
-import { LoadingDataStatus } from '../../const';
 import { makeFakeReview, makeFakeReviewPostRequest, makeFakeReviewPostResponse } from '../../mocks/mocks';
 import { fetchReviewsAction, postReviewAction } from '../api-action';
-import { reviewProcess, setPostSuccess, setSendingStatus } from './review-process';
+import { reviewProcess, setPostSuccess } from './review-process';
 
 describe('ReviewProcess', () => {
   it('should return initialState with empty action', () => {
     const emptyAction = {type: ''};
     const expectedState = {
       reviews: [],
-      reviewSendingStatus: LoadingDataStatus.Unsent,
       isPostSuccess: false,
     };
 
@@ -19,30 +17,15 @@ describe('ReviewProcess', () => {
     const emptyAction = {type: ''};
     const expectedState = {
       reviews: [],
-      reviewSendingStatus: LoadingDataStatus.Unsent,
       isPostSuccess: false,
     };
 
     const result = reviewProcess.reducer(undefined, emptyAction);
     expect(result).toEqual(expectedState);
   });
-  it('should set "reviewSendingStatus" to  with setSendingStatus action', () => {
-    const expectedStatus = LoadingDataStatus.Success;
-    const initialState = {
-      reviews: [],
-      reviewSendingStatus: LoadingDataStatus.Unsent,
-      isPostSuccess: false,
-    };
-
-    const result = reviewProcess.reducer(
-      initialState, setSendingStatus(expectedStatus)
-    );
-    expect(result.reviewSendingStatus).toBe(expectedStatus);
-  });
   it('should set "isPostSuccess" to true with setPostSuccess action', () => {
     const initialSate = {
       reviews: [],
-      reviewSendingStatus: LoadingDataStatus.Unsent,
       isPostSuccess: false,
     };
     const result = reviewProcess.reducer(initialSate, setPostSuccess(true));
@@ -52,7 +35,6 @@ describe('ReviewProcess', () => {
     const mockReview = makeFakeReview();
     const expectedState = {
       reviews: [mockReview],
-      reviewSendingStatus: LoadingDataStatus.Unsent,
       isPostSuccess: false,
     };
 
@@ -63,10 +45,9 @@ describe('ReviewProcess', () => {
     );
     expect(result).toEqual(expectedState);
   });
-  it('should set "reviewSendingStatus" to Success, "isPostSuccess" to true with postReviewAction.fulfilled', () => {
+  it('"isPostSuccess" to true with postReviewAction.fulfilled', () => {
     const expectedState = {
       reviews: [],
-      reviewSendingStatus: LoadingDataStatus.Success,
       isPostSuccess: true,
     };
     const mockReviewPost = makeFakeReviewPostResponse();
@@ -76,12 +57,5 @@ describe('ReviewProcess', () => {
         mockReviewPost, '', mockReviewPostRequest
       ));
     expect(result).toEqual(expectedState);
-  });
-  it('should set "reviewSendingStatus" to Pending with postReviewAction.pending', () => {
-    const expectedStatus = LoadingDataStatus.Pending;
-
-    const result = reviewProcess.reducer(undefined,
-      postReviewAction.pending);
-    expect(result.reviewSendingStatus).toEqual(expectedStatus);
   });
 });

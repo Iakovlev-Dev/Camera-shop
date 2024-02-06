@@ -13,9 +13,7 @@ import Pagination from '../../components/pagination/pagination';
 import { useEffect, useState } from 'react';
 import PopupAddCameras from '../../components/popup-add-camera/popup-add-camera';
 import { Helmet } from 'react-helmet-async';
-
-
-const CARD_ON_PAGE = 9;
+import { CARD_ON_PAGE } from '../../const';
 
 export type TEventKey = {
   key: string;
