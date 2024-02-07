@@ -37,7 +37,6 @@ export default function Pagination ({count, currentPage, setPage}: TPagination) 
     setLastPageIndex(lastPageIndex - MAX_PAGES);
   };
 
-
   return (
     <div className="pagination" data-testid='pagination'>
       <ul className="pagination__list">
@@ -49,7 +48,7 @@ export default function Pagination ({count, currentPage, setPage}: TPagination) 
             onClick={setPage}
             key={item}
           />))}
-        {(pagesArray[pagesArray.length - 1] > pagesSlice[pagesSlice.length - 1]) ? <ButtonPagination button="next" onClick={clickNextButton} /> : ''}
+        {(pagesArray[pagesArray.length - 1] > pagesSlice[2]) ? <ButtonPagination button="next" onClick={clickNextButton} /> : ''}
       </ul>
     </div>
   );
