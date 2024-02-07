@@ -1,8 +1,9 @@
+import { useSearchParams } from 'react-router-dom';
 import { useAppSelector } from '../../store/hooks';
 import { selectReviews } from '../../store/reviews-process/selectors';
 import { TCamera } from '../../types/type-camera';
 import CardRating from '../card-rating/card-rating';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type TProduct = {
     card: TCamera;
@@ -16,10 +17,21 @@ export default function Product ({card, onClick}: TProduct) {
   const [isActiveSpecs, setActiveSpecs] = useState(false);
   const [isActiveDesc, setActiveDesc] = useState(true);
 
+  const [, setSearchParams] = useSearchParams();
+
   const handleClick = () => {
     setActiveSpecs(!isActiveSpecs);
     setActiveDesc(!isActiveDesc);
   };
+
+  useEffect(() => {
+    if(isActiveDesc){
+      setSearchParams({tab: 'desc'});
+    } else {
+      setSearchParams({tab: 'specs'});
+    }
+  }, [isActiveDesc, setSearchParams]);
+
 
   return (
     <div className="page-content__section">
