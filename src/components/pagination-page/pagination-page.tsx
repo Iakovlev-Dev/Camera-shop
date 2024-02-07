@@ -1,4 +1,6 @@
 
+import { TEventKey } from '../../pages/page-main/page-main';
+
 type TPaginationPage = {
     page: number;
     currentPage: number;
@@ -10,6 +12,17 @@ export default function PaginationPage ({page, currentPage, onClick}: TPaginatio
   const handleClickPage = (pageNumber: number) => {
     onClick(pageNumber);
   };
+  const handleKeyEnter = (pageNumber: number) => {
+
+    const handleKeyDown = (evt: TEventKey) => {
+      if(evt.key === 'Enter' || evt.key === ' ') {
+        document.removeEventListener('keydown', handleKeyDown);
+        onClick(pageNumber);
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+
+  };
 
 
   return (
@@ -17,6 +30,7 @@ export default function PaginationPage ({page, currentPage, onClick}: TPaginatio
       <a
         className={currentPage === page ? 'pagination__link pagination__link--active' : 'pagination__link'}
         onClick={() => handleClickPage(page)}
+        onKeyDown={() => handleKeyEnter(page)}
         tabIndex={0}
       >
         {page}
