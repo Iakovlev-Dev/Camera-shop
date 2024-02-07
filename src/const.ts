@@ -73,6 +73,11 @@ export const RatingNumb: Rating<string> = {
   Perfect: '5',
 };
 
+export const ProductButton = {
+  desc: 'desc',
+  specs: 'specs'
+};
+
 export const MIN_COUNT_STARS = 1;
 export const MAX_COUNT_STARS = 5;
 export const MAX_PAGES = 3;
