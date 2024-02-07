@@ -10,7 +10,6 @@ describe('Component: ProductReview', () => {
     const { withStoreComponent } = withStore(<ProductReview />, {
       [NameSpace.REVIEW]: {
         reviews: mockReview,
-        reviewSendingStatus: '',
         isPostSuccess: true
       }
     });

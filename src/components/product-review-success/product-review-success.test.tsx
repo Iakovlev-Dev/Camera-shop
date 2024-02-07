@@ -11,7 +11,6 @@ describe('Component: ProductReviewSuccess', () => {
       [NameSpace.REVIEW]: {
         isPostSuccess: true,
         reviews: [],
-        reviewSendingStatus: ''
       }
     }));
     const prepareComponent = withHistory(withStoreComponent);
