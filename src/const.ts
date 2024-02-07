@@ -73,9 +73,9 @@ export const RatingNumb: Rating<string> = {
   Perfect: '5',
 };
 
-export const ProductButton = {
-  desc: 'desc',
-  specs: 'specs'
+export const ProductButton: Rating<string> = {
+  desc: 'Описание',
+  specs: 'Характеристики'
 };
 
 export const MIN_COUNT_STARS = 1;
