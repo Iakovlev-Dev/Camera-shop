@@ -1,6 +1,9 @@
+import { useSearchParams } from 'react-router-dom';
+import { useAppSelector } from '../../store/hooks';
+import { selectReviews } from '../../store/reviews-process/selectors';
 import { TCamera } from '../../types/type-camera';
 import CardRating from '../card-rating/card-rating';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type TProduct = {
     card: TCamera;
@@ -9,15 +12,26 @@ type TProduct = {
 
 
 export default function Product ({card, onClick}: TProduct) {
-
+  const reviews = useAppSelector(selectReviews);
 
   const [isActiveSpecs, setActiveSpecs] = useState(false);
   const [isActiveDesc, setActiveDesc] = useState(true);
+
+  const [ , setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    if(isActiveDesc) {
+      setSearchParams({tab: 'description'});
+    } else {
+      setSearchParams({tab: 'specs'});
+    }
+  },[isActiveDesc, setSearchParams]);
 
   const handleClick = () => {
     setActiveSpecs(!isActiveSpecs);
     setActiveDesc(!isActiveDesc);
   };
+
 
   return (
     <div className="page-content__section">
@@ -44,7 +58,7 @@ export default function Product ({card, onClick}: TProduct) {
               <CardRating count={card.rating} />
               <p className="visually-hidden">Рейтинг: {card.rating}</p>
               <p className="rate__count">
-                <span className="visually-hidden">Всего оценок:</span>{card.reviewCount}
+                <span className="visually-hidden">Всего оценок:</span>{reviews.length}
               </p>
             </div>
             <p className="product__price">

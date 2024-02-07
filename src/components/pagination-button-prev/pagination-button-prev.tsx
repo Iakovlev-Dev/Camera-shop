@@ -12,6 +12,7 @@ export default function ButtonPagination ({button, onClick}: TButtonPagination) 
         onClick={() => {
           onClick();
         }}
+        tabIndex={0}
       >
         {button === 'next' ? 'Далее' : 'Назад'}
       </a>

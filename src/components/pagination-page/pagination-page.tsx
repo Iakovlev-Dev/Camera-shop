@@ -17,6 +17,7 @@ export default function PaginationPage ({page, currentPage, onClick}: TPaginatio
       <a
         className={currentPage === page ? 'pagination__link pagination__link--active' : 'pagination__link'}
         onClick={() => handleClickPage(page)}
+        tabIndex={0}
       >
         {page}
       </a>

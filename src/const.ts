@@ -23,7 +23,7 @@ export const FilterCategory: FilterBy<string> = {
 
 export const FilterType: FilterBy<string> = {
   Digital: 'Цифровая',
-  FilmCamera: 'Пленочная',
+  FilmCamera: 'Плёночная',
   Instant: 'Моментальная',
   Сollectible: 'Коллекционная'
 };
@@ -31,7 +31,7 @@ export const FilterType: FilterBy<string> = {
 export const FilterLevel: FilterBy<string> = {
   Zerolevel: 'Нулевой',
   Amateur: 'Любительский',
-  Professional: 'Любительский'
+  Professional: 'Профессиональный'
 };
 
 export const SortBy: SortBy<string> = {

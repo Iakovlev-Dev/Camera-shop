@@ -15,6 +15,8 @@ import { Helmet } from 'react-helmet-async';
 import { selectPostSuccess } from '../../store/reviews-process/selectors';
 
 import ProductReviewSuccess from '../../components/product-review-success/product-review-success';
+import { setCardId } from '../../store/data-card-process/data-card-process';
+
 
 export default function PageCamera () {
   const {id} = useParams();
@@ -24,11 +26,16 @@ export default function PageCamera () {
   const isPostReview = useAppSelector(selectPostSuccess);
 
   useEffect(() => {
-    if(id) {
+    window.scrollTo(0, 0);
+  }, [id]);
+
+  useEffect(() => {
+    if(id && currentCard) {
       dispatch(fetchSimilarProductsAction(Number(id)));
       dispatch(fetchReviewsAction(Number(id)));
+      dispatch(setCardId(currentCard));
     }
-  }, [dispatch, id]);
+  }, [currentCard, dispatch, id]);
 
   const handleClickAdd = (cardId: number) => {
     setIsAdd(true);
@@ -57,7 +64,6 @@ export default function PageCamera () {
       </>
     );
   }
-
 
   return (
     <div className="wrapper">
