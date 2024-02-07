@@ -13,6 +13,9 @@ export default function PaginationPage ({page, currentPage, onClick}: TPaginatio
     onClick(pageNumber);
   };
   const handleKeyEnter = (pageNumber: number) => {
+    if(pageNumber === currentPage) {
+      return;
+    }
 
     const handleKeyDown = (evt: TEventKey) => {
       if(evt.key === 'Enter' || evt.key === ' ') {

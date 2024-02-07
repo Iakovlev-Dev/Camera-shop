@@ -26,8 +26,15 @@ export default function PageMain () {
   const lastCardIndex = currentPage * CARD_ON_PAGE;
   const firstCardIndex = lastCardIndex - CARD_ON_PAGE;
   const currentCardPage = cards?.slice(firstCardIndex, lastCardIndex);
+  const paginate = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+    console.log(pageNumber);
+  };
+  useEffect(() => {
+    setCurrentPage(currentPage);
+  }, [currentPage]);
 
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
   const isLoadingStatusRejected = useAppSelector(selectLoadingStatusRejected);
 
   const [isOpenModal, setOpenModal] = useState(false);
