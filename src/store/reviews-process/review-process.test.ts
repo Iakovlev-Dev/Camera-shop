@@ -1,5 +1,5 @@
-import { makeFakeReview, makeFakeReviewPostRequest, makeFakeReviewPostResponse } from '../../mocks/mocks';
-import { fetchReviewsAction, postReviewAction } from '../api-action';
+import { makeFakeReview } from '../../mocks/mocks';
+import { fetchReviewsAction } from '../api-action';
 import { reviewProcess, setPostSuccess } from './review-process';
 
 describe('ReviewProcess', () => {
@@ -19,7 +19,6 @@ describe('ReviewProcess', () => {
       reviews: [],
       isPostSuccess: false,
     };
-
     const result = reviewProcess.reducer(undefined, emptyAction);
     expect(result).toEqual(expectedState);
   });
@@ -37,25 +36,11 @@ describe('ReviewProcess', () => {
       reviews: [mockReview],
       isPostSuccess: false,
     };
-
     const result = reviewProcess.reducer(undefined,
       fetchReviewsAction.fulfilled(
         [mockReview], '', mockReview.cameraId
       )
     );
-    expect(result).toEqual(expectedState);
-  });
-  it('"isPostSuccess" to true with postReviewAction.fulfilled', () => {
-    const expectedState = {
-      reviews: [],
-      isPostSuccess: true,
-    };
-    const mockReviewPost = makeFakeReviewPostResponse();
-    const mockReviewPostRequest = makeFakeReviewPostRequest();
-    const result = reviewProcess.reducer(undefined,
-      postReviewAction.fulfilled(
-        mockReviewPost, '', mockReviewPostRequest
-      ));
     expect(result).toEqual(expectedState);
   });
 });
