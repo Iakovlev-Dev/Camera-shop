@@ -28,7 +28,6 @@ export default function PageMain () {
   const currentCardPage = cards?.slice(firstCardIndex, lastCardIndex);
   const paginate = (pageNumber: number) => {
     setCurrentPage(pageNumber);
-    console.log(pageNumber);
   };
   useEffect(() => {
     setCurrentPage(currentPage);

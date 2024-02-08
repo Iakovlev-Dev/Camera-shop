@@ -3,6 +3,7 @@ import ButtonPagination from '../pagination-button-prev/pagination-button-prev';
 import PaginationPage from '../pagination-page/pagination-page';
 import { useSearchParams } from 'react-router-dom';
 import { MAX_PAGES } from '../../const';
+import { TEventKey } from '../../pages/page-main/page-main';
 
 
 type TPagination = {
@@ -25,22 +26,41 @@ export default function Pagination ({count, currentPage, setPage}: TPagination) 
   }, [currentPage, setSearchParams]);
 
   const clickNextButton = () => {
+    setPage(lastPageIndex + 1);
     setFirstPageIndex(firstPageIndex + MAX_PAGES);
     setLastPageIndex(lastPageIndex + MAX_PAGES);
-    setPage(firstPageIndex + MAX_PAGES + 1);
-
   };
 
   const clickPrevButton = () => {
-    setPage(firstPageIndex) ;
+    setPage(firstPageIndex);
     setFirstPageIndex(firstPageIndex - MAX_PAGES);
     setLastPageIndex(lastPageIndex - MAX_PAGES);
+  };
+
+  const handleKeyEnterNext = (evt: TEventKey) => {
+    const handleKeyDown = () => {
+      if(evt.key === ' ' || evt.key === 'Enter') {
+        clickNextButton();
+        document.removeEventListener('keydown', handleKeyDown);
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+  };
+
+  const handleKeyEnterPrev = (evt: TEventKey) => {
+    const handleKeyDown = () => {
+      if(evt.key === ' ' || evt.key === 'Enter') {
+        clickPrevButton();
+        document.removeEventListener('keydown', handleKeyDown);
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
   };
 
   return (
     <div className="pagination" data-testid='pagination'>
       <ul className="pagination__list">
-        {currentPage > MAX_PAGES ? <ButtonPagination button="prev" onClick={clickPrevButton} /> : ''}
+        {lastPageIndex > MAX_PAGES ? <ButtonPagination button="prev" onClick={clickPrevButton} onKeyDown={handleKeyEnterPrev}/> : ''}
         {pagesSlice.map((item) => (
           <PaginationPage
             page={item}
@@ -48,7 +68,7 @@ export default function Pagination ({count, currentPage, setPage}: TPagination) 
             onClick={setPage}
             key={item}
           />))}
-        {(pagesArray[pagesArray.length - 1] > pagesSlice[2]) ? <ButtonPagination button="next" onClick={clickNextButton} /> : ''}
+        {lastPageIndex < pagesArray.length ? <ButtonPagination button="next" onClick={clickNextButton} onKeyDown={handleKeyEnterNext}/> : ''}
       </ul>
     </div>
   );
