@@ -84,3 +84,4 @@ export const MAX_PAGES = 3;
 export const MAX_REVIEW = 3;
 export const MAX_SIMILAR_PRODUCTS = 3;
 export const CARD_ON_PAGE = 9;
+export const MIN_LETTER_FOR_SEARCH = 3;
