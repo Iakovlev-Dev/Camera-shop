@@ -1,6 +1,18 @@
-import { SortBtn } from '../../const';
+import { SortBtn, SortBtnRus, SortBy } from '../../const';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { selectActiveSortBtn, selectActiveSortBy } from '../../store/sorting-process/selectors';
+import { setActiveSortBtn, setActiveSortBy } from '../../store/sorting-process/sorting-process';
 
 export default function SortingBtn () {
+  const dispatch = useAppDispatch();
+  const sortBtn = useAppSelector(selectActiveSortBtn);
+  const sortBy = useAppSelector(selectActiveSortBy);
+  const handleClickSort = (sort: string) => {
+    dispatch(setActiveSortBtn(sort));
+    if(!sortBy) {
+      dispatch(setActiveSortBy(SortBy.sortPrice));
+    }
+  };
   return (
     <>
       {Object.keys(SortBtn).map((item) => (
@@ -9,8 +21,10 @@ export default function SortingBtn () {
             type="radio"
             id={item}
             name="sort-icon"
-            defaultChecked = {item === 'up'}
-            aria-label={SortBtn[item]}
+            aria-label={SortBtnRus[item]}
+            onChange={() => handleClickSort(item)}
+            checked={sortBtn === item}
+            tabIndex={0}
           />
           <label htmlFor={item}>
             <svg width={16} height={14} aria-hidden="true">

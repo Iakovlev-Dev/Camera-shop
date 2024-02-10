@@ -34,20 +34,31 @@ export const FilterLevel: FilterBy<string> = {
   Professional: 'Профессиональный'
 };
 
-export const SortBy: SortBy<string> = {
+export const SortBy = {
+  sortPrice: 'sortPrice',
+  sortPopular: 'sortPopular'
+} as const;
+
+export const SortByRus : SortBy<string> = {
   sortPrice: 'по цене',
   sortPopular: 'по популярности'
-};
+} as const;
 
-export const SortBtn: SortBy<string> = {
+export const SortBtn = {
+  up: 'up',
+  down: 'down'
+} as const;
+
+export const SortBtnRus: SortBy<string> = {
   up: 'по возрастанию',
   down: 'по убыванию'
-};
+} as const;
 
 export const NameSpace = {
   DATA_CARDS: 'DATA_CARDS',
   REVIEW: 'REVIEW',
   PROMO: 'PROMO',
+  SORTING: 'SORTING',
 } as const;
 
 export const APIRoute = {

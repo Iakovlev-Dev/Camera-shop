@@ -1,6 +1,25 @@
-import { SortBy } from '../../const';
+import { useSearchParams } from 'react-router-dom';
+import { SortBtn, SortBy, SortByRus } from '../../const';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { selectActiveSortBtn, selectActiveSortBy } from '../../store/sorting-process/selectors';
+import { setActiveSortBtn, setActiveSortBy } from '../../store/sorting-process/sorting-process';
 
 export default function Sorting () {
+  const dispatch = useAppDispatch();
+  const sortBtn = useAppSelector(selectActiveSortBtn);
+  const sortBy = useAppSelector(selectActiveSortBy);
+  const [ searchParams, ] = useSearchParams();
+
+
+  const handleClickSort = (sort: string) => {
+    searchParams.set(sort, sort);
+
+    dispatch(setActiveSortBy(sort));
+    if(!sortBtn) {
+      dispatch(setActiveSortBtn(SortBtn.up));
+    }
+  };
+
   return (
     <>
       {Object.keys(SortBy).map((item) => (
@@ -9,9 +28,10 @@ export default function Sorting () {
             type="radio"
             id={item}
             name="sort"
-            defaultChecked={item === 'sortPrice'}
+            onChange={() => handleClickSort(item)}
+            checked={item === sortBy}
           />
-          <label htmlFor={item}>{SortBy[item]}</label>
+          <label htmlFor={item}>{SortByRus[item]}</label>
         </div>
       ))}
     </>
