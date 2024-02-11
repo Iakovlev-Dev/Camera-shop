@@ -1,4 +1,3 @@
-import { useSearchParams } from 'react-router-dom';
 import { SortBtn, SortBy, SortByRus } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { selectActiveSortBtn, selectActiveSortBy } from '../../store/sorting-process/selectors';
@@ -8,12 +7,8 @@ export default function Sorting () {
   const dispatch = useAppDispatch();
   const sortBtn = useAppSelector(selectActiveSortBtn);
   const sortBy = useAppSelector(selectActiveSortBy);
-  const [ searchParams, ] = useSearchParams();
-
 
   const handleClickSort = (sort: string) => {
-    searchParams.set(sort, sort);
-
     dispatch(setActiveSortBy(sort));
     if(!sortBtn) {
       dispatch(setActiveSortBtn(SortBtn.up));
