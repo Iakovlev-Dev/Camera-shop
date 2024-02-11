@@ -25,6 +25,10 @@ export const makeFakeStore = (initialState: Partial<TState>) => ({
     reviews: [],
     isPostSuccess: false,
   },
+  SORTING: {
+    activeSortBy: '',
+    activeSortBtn: '',
+  },
   ...initialState ?? {}
 });
 

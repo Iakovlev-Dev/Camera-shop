@@ -1,6 +1,8 @@
 import dayjs from 'dayjs';
 import updateLocale from 'dayjs/plugin/updateLocale';
 import { TReviews } from './types/type-reviews';
+import { TCamera } from './types/type-camera';
+import { SortBtn, SortBy } from './const';
 
 export const dateFormatReview = (date: string) => dayjs(date).format('DD MMMM');
 
@@ -15,4 +17,27 @@ export const sortReview = (a: TReviews, b:TReviews) => {
   const dateA = dayjs(a.createAt);
   const dateB = dayjs(b.createAt);
   return dateB.diff(dateA);
+};
+
+export const sortingBy = (activeSort: string, activeBtn: string, cameras: TCamera[]): TCamera[] | undefined => {
+  switch (activeSort) {
+    case SortBy.sortPrice:
+      switch(activeBtn){
+        case SortBtn.up:
+          return cameras.sort((cameraA: TCamera, cameraB: TCamera) => cameraA.price - cameraB.price);
+        case SortBtn.down:
+          return cameras.sort((cameraA: TCamera, cameraB: TCamera) => cameraB.price - cameraA.price);
+      }
+      break;
+    case SortBy.sortPopular:
+      switch(activeBtn) {
+        case SortBtn.up:
+          return cameras.sort((cameraA: TCamera, cameraB: TCamera) => cameraA.rating - cameraB.rating);
+        case SortBtn.down:
+          return cameras.sort((cameraA: TCamera, cameraB: TCamera) => cameraB.rating - cameraA.rating);
+      }
+      break;
+    default:
+      return cameras;
+  }
 };

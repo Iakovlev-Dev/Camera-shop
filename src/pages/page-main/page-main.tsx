@@ -14,6 +14,8 @@ import { useEffect, useState } from 'react';
 import PopupAddCameras from '../../components/popup-add-camera/popup-add-camera';
 import { Helmet } from 'react-helmet-async';
 import { CARD_ON_PAGE } from '../../const';
+import { selectActiveSortBtn, selectActiveSortBy } from '../../store/sorting-process/selectors';
+import { sortingBy } from '../../utils';
 
 export type TEventKey = {
   key: string;
@@ -21,11 +23,17 @@ export type TEventKey = {
 }
 
 export default function PageMain () {
+  const sortBtn = useAppSelector(selectActiveSortBtn);
+  const sortBy = useAppSelector(selectActiveSortBy);
   const cards = useAppSelector(selectCards);
+
+  const sortedCards = sortingBy(sortBy, sortBtn, [...cards]);
+
   const [currentPage, setCurrentPage] = useState(1);
   const lastCardIndex = currentPage * CARD_ON_PAGE;
   const firstCardIndex = lastCardIndex - CARD_ON_PAGE;
-  const currentCardPage = cards?.slice(firstCardIndex, lastCardIndex);
+  const currentCardPage = sortedCards?.slice(firstCardIndex, lastCardIndex);
+
   const paginate = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
