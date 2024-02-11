@@ -1,4 +1,4 @@
-import { SortBtnRus, SortBy } from '../../const';
+import { SortBtn, SortBtnRus, SortBy } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { selectActiveSortBtn, selectActiveSortBy } from '../../store/sorting-process/selectors';
 import { setActiveSortBtn, setActiveSortBy } from '../../store/sorting-process/sorting-process';
@@ -15,7 +15,7 @@ export default function SortingBtn () {
   };
   return (
     <>
-      {Object.keys(SortBtnRus).map((item) => (
+      {Object.keys(SortBtn).map((item) => (
         <div className={`catalog-sort__btn catalog-sort__btn--${item}`} key={item} data-testid='sorting-btn'>
           <input
             type="radio"
