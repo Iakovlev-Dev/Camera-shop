@@ -16,19 +16,31 @@ interface Rating <T> {
   [key: string]: T;
 }
 
-export const FilterCategory: FilterBy<string> = {
+export const FilterCategoryRus: FilterBy<string> = {
   Fotocamera: 'Фотокамера',
   Videocamera: 'Видеокамера'
 };
 
-export const FilterType: FilterBy<string> = {
+export const FilterCategory = {
+  Fotocamera: 'Fotocamera',
+  Videocamera: 'Videocamera'
+};
+
+export const FilterTypeRus: FilterBy<string> = {
   Digital: 'Цифровая',
   FilmCamera: 'Плёночная',
   Instant: 'Моментальная',
   Сollectible: 'Коллекционная'
 };
 
-export const FilterLevel: FilterBy<string> = {
+export const FilterType = {
+  Digital: 'Digital',
+  FilmCamera: 'FilmCamera',
+  Instant: 'Instant',
+  Сollectible: 'Сollectible'
+};
+
+export const FilterLevelRus: FilterBy<string> = {
   Zerolevel: 'Нулевой',
   Amateur: 'Любительский',
   Professional: 'Профессиональный'
@@ -59,6 +71,7 @@ export const NameSpace = {
   REVIEW: 'REVIEW',
   PROMO: 'PROMO',
   SORTING: 'SORTING',
+  FILTERS: 'FILTERS',
 } as const;
 
 export const APIRoute = {

@@ -6,7 +6,7 @@ import Sorting from '../../components/sorting/sorting';
 import SortingBtn from '../../components/sorting-btn/sorting-btn';
 import Footer from '../../components/footer/footer';
 import Card from '../../components/card/card';
-import { useAppSelector } from '../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { selectCards, selectLoadingStatusRejected } from '../../store/data-card-process/selectors';
 import Banner from '../../components/banner/banner';
 import Pagination from '../../components/pagination/pagination';
@@ -15,7 +15,10 @@ import PopupAddCameras from '../../components/popup-add-camera/popup-add-camera'
 import { Helmet } from 'react-helmet-async';
 import { CARD_ON_PAGE } from '../../const';
 import { selectActiveSortBtn, selectActiveSortBy } from '../../store/sorting-process/selectors';
-import { sortingBy } from '../../utils';
+import { filtredCategory, sortingBy } from '../../utils';
+import { TCameraArray } from '../../types/type-camera';
+import { selectFilterCategory } from '../../store/filter-process/selectors';
+import { setFilterCategory } from '../../store/filter-process/filter-process';
 
 export type TEventKey = {
   key: string;
@@ -23,16 +26,18 @@ export type TEventKey = {
 }
 
 export default function PageMain () {
+  const dispatch = useAppDispatch();
   const sortBtn = useAppSelector(selectActiveSortBtn);
   const sortBy = useAppSelector(selectActiveSortBy);
   const cards = useAppSelector(selectCards);
+  const currentFilterCategory = useAppSelector(selectFilterCategory);
 
   const sortedCards = sortingBy(sortBy, sortBtn, [...cards]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const lastCardIndex = currentPage * CARD_ON_PAGE;
   const firstCardIndex = lastCardIndex - CARD_ON_PAGE;
-  const currentCardPage = sortedCards?.slice(firstCardIndex, lastCardIndex);
+
 
   const paginate = (pageNumber: number) => {
     setCurrentPage(pageNumber);
@@ -67,14 +72,29 @@ export default function PageMain () {
     return () => document.removeEventListener('keydown', handleClickEsc);
   }, [isOpenModal]);
 
-  if(!cards) {
+  function getFiltredCameras ():TCameraArray | undefined {
+    if(!sortedCards){
+      return;
+    }
+    if(!currentFilterCategory) {
+      return sortedCards;
+    }
+
+    const filtredCameras = filtredCategory[currentFilterCategory]([...sortedCards]);
+    return filtredCameras;
+  }
+  const filtredCamerasAll = getFiltredCameras();
+
+  const currentCardPage = filtredCamerasAll?.slice(firstCardIndex, lastCardIndex);
+
+  if(!filtredCamerasAll) {
     return (
       <>
       </>
     );
   }
 
-  const countPages = Math.ceil(cards.length / CARD_ON_PAGE);
+  const countPages = Math.ceil(filtredCamerasAll.length / CARD_ON_PAGE);
 
   return (
     <div className="wrapper">
@@ -146,6 +166,7 @@ export default function PageMain () {
                       <button
                         className="btn catalog-filter__reset-btn"
                         type="reset"
+                        onClick={() => dispatch(setFilterCategory(''))}
                       >
                     Сбросить фильтры
                       </button>
