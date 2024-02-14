@@ -1,9 +1,11 @@
 import { FilterLevelRus } from '../../const';
-import { setFilterLevel } from '../../store/filter-process/filter-process';
-import { useAppDispatch } from '../../store/hooks';
 
-export default function FilterByLevel () {
-  const dispatch = useAppDispatch();
+type TFilterByLevel = {
+  onChange: (evt: boolean, filter: string) => void;
+}
+
+export default function FilterByLevel ({onChange}: TFilterByLevel) {
+
   return (
     <>
       {Object.keys(FilterLevelRus).map((item) => (
@@ -12,7 +14,7 @@ export default function FilterByLevel () {
             <input
               type="checkbox"
               name={item}
-              onClick={() => dispatch(setFilterLevel(item))}
+              onChange={(evt) => onChange(evt.target.checked, FilterLevelRus[item])}
             />
             <span className="custom-checkbox__icon" />
             <span className="custom-checkbox__label">{FilterLevelRus[item]}</span>

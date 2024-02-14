@@ -6,7 +6,7 @@ import Sorting from '../../components/sorting/sorting';
 import SortingBtn from '../../components/sorting-btn/sorting-btn';
 import Footer from '../../components/footer/footer';
 import Card from '../../components/card/card';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { useAppSelector } from '../../store/hooks';
 import { selectCards, selectLoadingStatusRejected } from '../../store/data-card-process/selectors';
 import Banner from '../../components/banner/banner';
 import Pagination from '../../components/pagination/pagination';
@@ -15,10 +15,9 @@ import PopupAddCameras from '../../components/popup-add-camera/popup-add-camera'
 import { Helmet } from 'react-helmet-async';
 import { CARD_ON_PAGE } from '../../const';
 import { selectActiveSortBtn, selectActiveSortBy } from '../../store/sorting-process/selectors';
-import { filtredCategory, sortingBy } from '../../utils';
+import { sortingBy } from '../../utils';
 import { TCameraArray } from '../../types/type-camera';
-import { selectFilterCategory } from '../../store/filter-process/selectors';
-import { setFilterCategory } from '../../store/filter-process/filter-process';
+
 
 export type TEventKey = {
   key: string;
@@ -26,11 +25,9 @@ export type TEventKey = {
 }
 
 export default function PageMain () {
-  const dispatch = useAppDispatch();
   const sortBtn = useAppSelector(selectActiveSortBtn);
   const sortBy = useAppSelector(selectActiveSortBy);
   const cards = useAppSelector(selectCards);
-  const currentFilterCategory = useAppSelector(selectFilterCategory);
 
   const sortedCards = sortingBy(sortBy, sortBtn, [...cards]);
 
@@ -72,29 +69,59 @@ export default function PageMain () {
     return () => document.removeEventListener('keydown', handleClickEsc);
   }, [isOpenModal]);
 
-  function getFiltredCameras ():TCameraArray | undefined {
-    if(!sortedCards){
-      return;
-    }
-    if(!currentFilterCategory) {
-      return sortedCards;
-    }
+  const [categoryFiltersType, setCategoryFiltersType] = useState(new Set());
+  const [categoryFiltersLevel, setCategoriesFiltersLevel] = useState(new Set());
 
-    const filtredCameras = filtredCategory[currentFilterCategory]([...sortedCards]);
-    return filtredCameras;
+  const handleFilterChangeType = (checked: boolean, filter: string) => {
+    if(checked) {
+      setCategoryFiltersType((prev) => new Set(prev).add(filter));
+      setCurrentPage(1);
+    }
+    if(!checked) {
+      setCategoryFiltersType((prev) => {
+        const next = new Set(prev);
+        next.delete(filter);
+        setCurrentPage(1);
+        return next;
+      });
+    }
+  };
+
+  const handleFilterChangeLevel = (checked: boolean, filter: string) => {
+    if(checked) {
+      setCategoriesFiltersLevel((prev) => new Set(prev).add(filter));
+      setCurrentPage(1);
+    }
+    if(!checked) {
+      setCategoriesFiltersLevel((prev) => {
+        const next = new Set(prev);
+        next.delete(filter);
+        setCurrentPage(1);
+        return next;
+      });
+    }
+  };
+
+  if(!sortedCards){
+    return;
   }
-  const filtredCamerasAll = getFiltredCameras();
+  const getFiltredCameras = (): TCameraArray => {
+    const filtredCameras = categoryFiltersType.size === 0 ? sortedCards : sortedCards.filter((item) => categoryFiltersType.has(item.type));
+    return filtredCameras;
+  };
+  const filtredAllCameras = getFiltredCameras();
 
-  const currentCardPage = filtredCamerasAll?.slice(firstCardIndex, lastCardIndex);
-
-  if(!filtredCamerasAll) {
+  const currentCardPage = filtredAllCameras?.slice(firstCardIndex, lastCardIndex);
+  console.log(categoryFiltersType);
+  console.log(filtredAllCameras);
+  if(!filtredAllCameras) {
     return (
       <>
       </>
     );
   }
 
-  const countPages = Math.ceil(filtredCamerasAll.length / CARD_ON_PAGE);
+  const countPages = Math.ceil(filtredAllCameras.length / CARD_ON_PAGE);
 
   return (
     <div className="wrapper">
@@ -157,16 +184,16 @@ export default function PageMain () {
                       </fieldset>
                       <fieldset className="catalog-filter__block">
                         <legend className="title title--h5">Тип камеры</legend>
-                        <FilterByType />
+                        <FilterByType onChange={handleFilterChangeType}/>
                       </fieldset>
                       <fieldset className="catalog-filter__block">
                         <legend className="title title--h5">Уровень</legend>
-                        <FilterByLevel />
+                        <FilterByLevel onChange={handleFilterChangeLevel}/>
                       </fieldset>
                       <button
                         className="btn catalog-filter__reset-btn"
                         type="reset"
-                        onClick={() => dispatch(setFilterCategory(''))}
+                        onClick={() => setCategoryFiltersType(new Set())}
                       >
                     Сбросить фильтры
                       </button>

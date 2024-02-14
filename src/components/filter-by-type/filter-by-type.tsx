@@ -1,10 +1,13 @@
 import { FilterCategory, FilterType, FilterTypeRus } from '../../const';
-import { setFilterType } from '../../store/filter-process/filter-process';
 import { selectFilterCategory } from '../../store/filter-process/selectors';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { useAppSelector } from '../../store/hooks';
 
-export default function FilterByType () {
-  const dispatch = useAppDispatch();
+type TFilterByType = {
+  onChange: (evt: boolean, filter: string) => void;
+}
+
+export default function FilterByType ({onChange}: TFilterByType) {
+
   const activeCategory = useAppSelector(selectFilterCategory);
   const disabledItem = (active: string, current: string) => {
     if(active === FilterCategory.Fotocamera || !active) {
@@ -25,9 +28,9 @@ export default function FilterByType () {
           <label>
             <input
               type="checkbox"
-              name="digital"
+              name={item}
               disabled = {disabledItem(activeCategory, item)}
-              onClick={() => dispatch(setFilterType(item))}
+              onChange={(evt) => onChange(evt.target.checked, FilterTypeRus[item])}
             />
             <span className="custom-checkbox__icon" />
             <span className="custom-checkbox__label">{FilterTypeRus[item]}</span>
