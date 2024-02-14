@@ -6,17 +6,19 @@ import Sorting from '../../components/sorting/sorting';
 import SortingBtn from '../../components/sorting-btn/sorting-btn';
 import Footer from '../../components/footer/footer';
 import Card from '../../components/card/card';
-import { useAppSelector } from '../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { selectCards, selectLoadingStatusRejected } from '../../store/data-card-process/selectors';
 import Banner from '../../components/banner/banner';
 import Pagination from '../../components/pagination/pagination';
 import { useEffect, useState } from 'react';
 import PopupAddCameras from '../../components/popup-add-camera/popup-add-camera';
 import { Helmet } from 'react-helmet-async';
-import { CARD_ON_PAGE } from '../../const';
+import { CARD_ON_PAGE, FilterCategory } from '../../const';
 import { selectActiveSortBtn, selectActiveSortBy } from '../../store/sorting-process/selectors';
-import { sortingBy } from '../../utils';
+import { filtredCategory, sortingBy } from '../../utils';
 import { TCameraArray } from '../../types/type-camera';
+import { selectFilterCategory } from '../../store/filter-process/selectors';
+import { setFilterCategory } from '../../store/filter-process/filter-process';
 
 
 export type TEventKey = {
@@ -25,9 +27,11 @@ export type TEventKey = {
 }
 
 export default function PageMain () {
+  const dispatch = useAppDispatch();
   const sortBtn = useAppSelector(selectActiveSortBtn);
   const sortBy = useAppSelector(selectActiveSortBy);
   const cards = useAppSelector(selectCards);
+  const currentCategory = useAppSelector(selectFilterCategory);
 
   const sortedCards = sortingBy(sortBy, sortBtn, [...cards]);
 
@@ -102,18 +106,32 @@ export default function PageMain () {
     }
   };
 
+  const handleResetClick = () => {
+    setCategoryFiltersType(new Set());
+    setCategoriesFiltersLevel(new Set());
+    dispatch(setFilterCategory(''));
+  };
+
   if(!sortedCards){
     return;
   }
+
   const getFiltredCameras = (): TCameraArray => {
-    const filtredCameras = categoryFiltersType.size === 0 ? sortedCards : sortedCards.filter((item) => categoryFiltersType.has(item.type));
+    let filtredCameras = categoryFiltersType.size === 0 ? sortedCards : sortedCards.filter((item) => categoryFiltersType.has(item.type));
+    filtredCameras = categoryFiltersLevel.size === 0 ? filtredCameras : filtredCameras.filter((item) => categoryFiltersLevel.has(item.level));
+    switch(currentCategory) {
+      case FilterCategory.Fotocamera:
+        return filtredCategory[FilterCategory.Fotocamera](filtredCameras);
+      case FilterCategory.Videocamera:
+        return filtredCategory[FilterCategory.Videocamera](filtredCameras);
+    }
     return filtredCameras;
   };
+
   const filtredAllCameras = getFiltredCameras();
 
   const currentCardPage = filtredAllCameras?.slice(firstCardIndex, lastCardIndex);
-  console.log(categoryFiltersType);
-  console.log(filtredAllCameras);
+
   if(!filtredAllCameras) {
     return (
       <>
@@ -193,7 +211,7 @@ export default function PageMain () {
                       <button
                         className="btn catalog-filter__reset-btn"
                         type="reset"
-                        onClick={() => setCategoryFiltersType(new Set())}
+                        onClick={() => handleResetClick()}
                       >
                     Сбросить фильтры
                       </button>
