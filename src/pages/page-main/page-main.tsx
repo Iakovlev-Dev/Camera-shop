@@ -106,18 +106,13 @@ export default function PageMain () {
     }
   };
 
-  const handleResetClick = () => {
-    setCategoryFiltersType(new Set());
-    setCategoriesFiltersLevel(new Set());
-    dispatch(setFilterCategory(''));
-  };
-
   if(!sortedCards){
     return;
   }
 
   const getFiltredCameras = (): TCameraArray => {
-    let filtredCameras = categoryFiltersType.size === 0 ? sortedCards : sortedCards.filter((item) => categoryFiltersType.has(item.type));
+    let filtredCameras = sortedCards;
+    filtredCameras = categoryFiltersType.size === 0 ? filtredCameras : filtredCameras.filter((item) => categoryFiltersType.has(item.type));
     filtredCameras = categoryFiltersLevel.size === 0 ? filtredCameras : filtredCameras.filter((item) => categoryFiltersLevel.has(item.level));
     switch(currentCategory) {
       case FilterCategory.Fotocamera:
@@ -127,6 +122,13 @@ export default function PageMain () {
     }
     return filtredCameras;
   };
+
+  const handleResetClick = () => {
+    setCategoryFiltersType(new Set());
+    setCategoriesFiltersLevel(new Set());
+    dispatch(setFilterCategory(''));
+  };
+
 
   const filtredAllCameras = getFiltredCameras();
 
