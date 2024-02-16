@@ -1,11 +1,10 @@
 import { FilterCategoryRus } from '../../const';
-import { setFilterCategory } from '../../store/filter-process/filter-process';
-import { selectFilterCategory } from '../../store/filter-process/selectors';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
 
-export default function FilterByCategory () {
-  const dispatch = useAppDispatch();
-  const activeCategory = useAppSelector(selectFilterCategory);
+type TFilterByCategory = {
+  onChange: (filter: string) => void;
+  currentCategory: string;
+}
+export default function FilterByCategory ({onChange, currentCategory}: TFilterByCategory) {
 
   return (
     <>
@@ -15,8 +14,8 @@ export default function FilterByCategory () {
             <input
               type="checkbox"
               name={item}
-              onChange={() => dispatch(setFilterCategory(item))}
-              checked = {item === activeCategory}
+              onChange={() => onChange(item)}
+              checked = {item === currentCategory}
             />
             <span className="custom-checkbox__icon" />
             <span className="custom-checkbox__label">

@@ -1,12 +1,9 @@
 import Header from '../../components/header/header';
-import FilterByCategory from '../../components/filter-by-category/filter-by-category';
-import FilterByType from '../../components/filter-by-type/filter-by-type';
-import FilterByLevel from '../../components/filter-by-level/filter-by-level';
 import Sorting from '../../components/sorting/sorting';
 import SortingBtn from '../../components/sorting-btn/sorting-btn';
 import Footer from '../../components/footer/footer';
 import Card from '../../components/card/card';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { useAppSelector } from '../../store/hooks';
 import { selectCards, selectLoadingStatusRejected } from '../../store/data-card-process/selectors';
 import Banner from '../../components/banner/banner';
 import Pagination from '../../components/pagination/pagination';
@@ -17,9 +14,8 @@ import { CARD_ON_PAGE, FilterCategory } from '../../const';
 import { selectActiveSortBtn, selectActiveSortBy } from '../../store/sorting-process/selectors';
 import { filtredCategory, sortingBy } from '../../utils';
 import { TCameraArray } from '../../types/type-camera';
-import { selectFilterCategory } from '../../store/filter-process/selectors';
-import { setFilterCategory } from '../../store/filter-process/filter-process';
 
+import Filters from '../../components/filters/filters';
 
 export type TEventKey = {
   key: string;
@@ -27,18 +23,14 @@ export type TEventKey = {
 }
 
 export default function PageMain () {
-  const dispatch = useAppDispatch();
   const sortBtn = useAppSelector(selectActiveSortBtn);
   const sortBy = useAppSelector(selectActiveSortBy);
   const cards = useAppSelector(selectCards);
-  const currentCategory = useAppSelector(selectFilterCategory);
-
   const sortedCards = sortingBy(sortBy, sortBtn, [...cards]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const lastCardIndex = currentPage * CARD_ON_PAGE;
   const firstCardIndex = lastCardIndex - CARD_ON_PAGE;
-
 
   const paginate = (pageNumber: number) => {
     setCurrentPage(pageNumber);
@@ -46,7 +38,6 @@ export default function PageMain () {
   useEffect(() => {
     setCurrentPage(currentPage);
   }, [currentPage]);
-
 
   const isLoadingStatusRejected = useAppSelector(selectLoadingStatusRejected);
 
@@ -75,6 +66,7 @@ export default function PageMain () {
 
   const [categoryFiltersType, setCategoryFiltersType] = useState(new Set());
   const [categoryFiltersLevel, setCategoriesFiltersLevel] = useState(new Set());
+  const [categoryFiltersCategory, setCategoryFiltersCategory] = useState('');
 
   const handleFilterChangeType = (checked: boolean, filter: string) => {
     if(checked) {
@@ -114,7 +106,7 @@ export default function PageMain () {
     let filtredCameras = sortedCards;
     filtredCameras = categoryFiltersType.size === 0 ? filtredCameras : filtredCameras.filter((item) => categoryFiltersType.has(item.type));
     filtredCameras = categoryFiltersLevel.size === 0 ? filtredCameras : filtredCameras.filter((item) => categoryFiltersLevel.has(item.level));
-    switch(currentCategory) {
+    switch(categoryFiltersCategory) {
       case FilterCategory.Fotocamera:
         return filtredCategory[FilterCategory.Fotocamera](filtredCameras);
       case FilterCategory.Videocamera:
@@ -126,9 +118,8 @@ export default function PageMain () {
   const handleResetClick = () => {
     setCategoryFiltersType(new Set());
     setCategoriesFiltersLevel(new Set());
-    dispatch(setFilterCategory(''));
+    setCategoryFiltersCategory('');
   };
-
 
   const filtredAllCameras = getFiltredCameras();
 
@@ -176,49 +167,7 @@ export default function PageMain () {
               <h1 className="title title--h2">Каталог фото- и видеотехники</h1>
               <div className="page-content__columns">
                 <div className="catalog__aside">
-                  <div className="catalog-filter">
-                    <form action="#">
-                      <h2 className="visually-hidden">Фильтр</h2>
-                      <fieldset className="catalog-filter__block">
-                        <legend className="title title--h5">Цена, ₽</legend>
-                        <div className="catalog-filter__price-range">
-                          <div className="custom-input">
-                            <label>
-                              <input type="number" name="price" placeholder="от" />
-                            </label>
-                          </div>
-                          <div className="custom-input">
-                            <label>
-                              <input
-                                type="number"
-                                name="priceUp"
-                                placeholder="до"
-                              />
-                            </label>
-                          </div>
-                        </div>
-                      </fieldset>
-                      <fieldset className="catalog-filter__block">
-                        <legend className="title title--h5">Категория</legend>
-                        <FilterByCategory />
-                      </fieldset>
-                      <fieldset className="catalog-filter__block">
-                        <legend className="title title--h5">Тип камеры</legend>
-                        <FilterByType onChange={handleFilterChangeType}/>
-                      </fieldset>
-                      <fieldset className="catalog-filter__block">
-                        <legend className="title title--h5">Уровень</legend>
-                        <FilterByLevel onChange={handleFilterChangeLevel}/>
-                      </fieldset>
-                      <button
-                        className="btn catalog-filter__reset-btn"
-                        type="reset"
-                        onClick={() => handleResetClick()}
-                      >
-                    Сбросить фильтры
-                      </button>
-                    </form>
-                  </div>
+                  <Filters onChangeType={handleFilterChangeType} onChangeLevel={handleFilterChangeLevel} onChangeCategory={setCategoryFiltersCategory} onClickReset={handleResetClick} currentCategory={categoryFiltersCategory}/>
                 </div>
                 <div className="catalog__content">
                   <div className="catalog-sort">
