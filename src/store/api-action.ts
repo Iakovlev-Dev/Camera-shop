@@ -55,3 +55,10 @@ export const postReviewAction = createAsyncThunk<TFormFielsResponse, TFormFielsR
     return data;
   }
 );
+
+export const fetchCamerasByPriceAction = createAsyncThunk<TCameraArray, string, TAPIAction>('fetchCamerasByPrice',
+  async (string, {extra: api}) => {
+    const {data} = await api.get<TCameraArray>(`${APIRoute.Cameras}?${string}`);
+    return data;
+  }
+);

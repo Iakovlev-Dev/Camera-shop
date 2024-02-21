@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { NameSpace } from '../../const';
 import { TCamera } from '../../types/type-camera';
-import { fetchCardAction, fetchCardsAction, fetchSimilarProductsAction } from '../api-action';
+import { fetchCamerasByPriceAction, fetchCardAction, fetchCardsAction, fetchSimilarProductsAction } from '../api-action';
 import { TSimilarProductArray } from '../../types/type-similar-product';
 
 export type TinitialStateDataCards = {
@@ -46,6 +46,9 @@ export const dataCardsProcess = createSlice({
       })
       .addCase(fetchSimilarProductsAction.fulfilled, (state, action) => {
         state.similarProducts = action.payload;
+      })
+      .addCase(fetchCamerasByPriceAction.fulfilled, (state, action) => {
+        state.cards = action.payload;
       });
   },
 });

@@ -125,6 +125,13 @@ export default function PageMain () {
 
   const currentCardPage = filtredAllCameras?.slice(firstCardIndex, lastCardIndex);
 
+  const minValue = filtredAllCameras.reduce((acc, curr) => acc.price < curr.price ? acc : curr, filtredAllCameras[0]);
+  const maxValue = filtredAllCameras.reduce((acc, curr) => acc.price > curr.price ? acc : curr, filtredAllCameras[0]);
+
+  if (!minValue && !maxValue) {
+    return;
+  }
+
   if(!filtredAllCameras) {
     return (
       <>
@@ -167,7 +174,15 @@ export default function PageMain () {
               <h1 className="title title--h2">Каталог фото- и видеотехники</h1>
               <div className="page-content__columns">
                 <div className="catalog__aside">
-                  <Filters onChangeType={handleFilterChangeType} onChangeLevel={handleFilterChangeLevel} onChangeCategory={setCategoryFiltersCategory} onClickReset={handleResetClick} currentCategory={categoryFiltersCategory}/>
+                  <Filters
+                    onChangeType={handleFilterChangeType}
+                    onChangeLevel={handleFilterChangeLevel}
+                    onChangeCategory={setCategoryFiltersCategory}
+                    onClickReset={handleResetClick}
+                    currentCategory={categoryFiltersCategory}
+                    min={minValue}
+                    max={maxValue}
+                  />
                 </div>
                 <div className="catalog__content">
                   <div className="catalog-sort">

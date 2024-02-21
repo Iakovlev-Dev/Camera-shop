@@ -46,4 +46,3 @@ export const filtredCategory = {
   [FilterCategory.Fotocamera]: (cameras: TCameraArray) => cameras.filter((camera) => camera.category === 'Фотоаппарат'),
   [FilterCategory.Videocamera]: (cameras: TCameraArray) => cameras.filter((camera) => camera.category === FilterCategoryRus.Videocamera)
 };
-

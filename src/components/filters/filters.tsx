@@ -1,6 +1,11 @@
+import { ChangeEvent, useEffect, useState } from 'react';
 import FilterByCategory from '../filter-by-category/filter-by-category';
 import FilterByLevel from '../filter-by-level/filter-by-level';
 import FilterByType from '../filter-by-type/filter-by-type';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { selectCards } from '../../store/data-card-process/selectors';
+import { fetchCamerasByPriceAction } from '../../store/api-action';
+import { TCamera } from '../../types/type-camera';
 
 type TFilters = {
     onChangeType: (evt: boolean, filter: string)=> void;
@@ -8,9 +13,55 @@ type TFilters = {
     onChangeCategory: (filter: string) => void;
     onClickReset: () => void;
     currentCategory: string;
+    min: TCamera;
+    max: TCamera;
 }
 
-export default function Filters ({onChangeType, onChangeLevel, onClickReset, onChangeCategory, currentCategory}: TFilters) {
+export default function Filters ({onChangeType, onChangeLevel, onClickReset, onChangeCategory, currentCategory, min, max}: TFilters) {
+  const dispatch = useAppDispatch();
+  const cameras = useAppSelector(selectCards);
+
+  const [priceFrom, setPriceFrom] = useState(min.price.toString());
+  const [priceTo, setPriceTo] = useState(max.price.toString());
+
+  console.log(min.price.toString());
+
+  useEffect(() => {
+    if(priceFrom && priceTo) {
+      dispatch(fetchCamerasByPriceAction(`price_gte=${priceFrom}&price_lte=${priceTo}`));
+    }
+  }, [dispatch, priceFrom, priceTo]);
+
+  const setValueInputFrom = (obj: TCamera, str: string): string => {
+    if(Number(str) < 0) {
+      return obj.price.toString();
+    }
+    if(Number(str) < obj.price) {
+      return obj.price.toString();
+    }
+    return str;
+  };
+
+  const setValueInputTo = (obj: TCamera, str: string): string => {
+    if(Number(str) < 0) {
+      return obj.price.toString();
+    }
+    if(Number(str) > obj.price) {
+      return obj.price.toString();
+    }
+    return str;
+  };
+
+  const handleChange = (evt: ChangeEvent<HTMLInputElement>, cb: (arg0: string) => void) => {
+    if(Number(evt.target.value) < min.price) {
+      cb(min.price.toString());
+    }
+    cb(evt.target.value);
+  };
+
+  if(!cameras) {
+    return;
+  }
 
   return (
     <div className="catalog-filter">
@@ -25,6 +76,8 @@ export default function Filters ({onChangeType, onChangeLevel, onClickReset, onC
                   type="number"
                   name="price"
                   placeholder="от"
+                  value={setValueInputFrom(min, priceFrom)}
+                  onChange={(evt) => handleChange(evt, setPriceFrom)}
                 />
               </label>
             </div>
@@ -34,6 +87,8 @@ export default function Filters ({onChangeType, onChangeLevel, onClickReset, onC
                   type="number"
                   name="priceUp"
                   placeholder="до"
+                  value={setValueInputTo(max, priceTo)}
+                  onChange={(evt) => (handleChange(evt, setPriceTo))}
                 />
               </label>
             </div>
