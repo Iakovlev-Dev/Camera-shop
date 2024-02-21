@@ -2,9 +2,8 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import FilterByCategory from '../filter-by-category/filter-by-category';
 import FilterByLevel from '../filter-by-level/filter-by-level';
 import FilterByType from '../filter-by-type/filter-by-type';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { selectCards } from '../../store/data-card-process/selectors';
-import { fetchCamerasByPriceAction } from '../../store/api-action';
+import { useAppDispatch } from '../../store/hooks';
+import { fetchCamerasByPriceAction, fetchCardsAction } from '../../store/api-action';
 import { TCamera } from '../../types/type-camera';
 
 type TFilters = {
@@ -19,12 +18,11 @@ type TFilters = {
 
 export default function Filters ({onChangeType, onChangeLevel, onClickReset, onChangeCategory, currentCategory, min, max}: TFilters) {
   const dispatch = useAppDispatch();
-  const cameras = useAppSelector(selectCards);
 
   const [priceFrom, setPriceFrom] = useState(min.price.toString());
   const [priceTo, setPriceTo] = useState(max.price.toString());
 
-  console.log(min.price.toString());
+  console.log(max.price.toString());
 
   useEffect(() => {
     if(priceFrom && priceTo) {
@@ -58,10 +56,12 @@ export default function Filters ({onChangeType, onChangeLevel, onClickReset, onC
     }
     cb(evt.target.value);
   };
-
-  if(!cameras) {
-    return;
-  }
+  const reset = () => {
+    onClickReset();
+    setPriceFrom(min.price.toString());
+    setPriceTo(max.price.toString());
+    dispatch(fetchCardsAction());
+  };
 
   return (
     <div className="catalog-filter">
@@ -109,7 +109,7 @@ export default function Filters ({onChangeType, onChangeLevel, onClickReset, onC
         <button
           className="btn catalog-filter__reset-btn"
           type="reset"
-          onClick={() => onClickReset()}
+          onClick={() => reset()}
         >
                     Сбросить фильтры
         </button>

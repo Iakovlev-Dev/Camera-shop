@@ -14,8 +14,8 @@ import { CARD_ON_PAGE, FilterCategory } from '../../const';
 import { selectActiveSortBtn, selectActiveSortBy } from '../../store/sorting-process/selectors';
 import { filtredCategory, sortingBy } from '../../utils';
 import { TCameraArray } from '../../types/type-camera';
-
 import Filters from '../../components/filters/filters';
+
 
 export type TEventKey = {
   key: string;
@@ -132,16 +132,9 @@ export default function PageMain () {
     return;
   }
 
-  if(!filtredAllCameras) {
-    return (
-      <>
-      </>
-    );
-  }
-
   const countPages = Math.ceil(filtredAllCameras.length / CARD_ON_PAGE);
 
-  return (
+  return (filtredAllCameras &&
     <div className="wrapper">
       <Helmet>
         <title>Фотошоп</title>
