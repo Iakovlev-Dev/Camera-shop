@@ -25,6 +25,10 @@ export const FilterCategory = {
   Fotocamera: 'Fotocamera',
   Videocamera: 'Videocamera'
 };
+export const categorysFilter: FilterBy<string> = {
+  Fotocamera: 'Фотоаппарат',
+  Videocamera: 'Видеокамера'
+};
 
 export const FilterTypeRus: FilterBy<string> = {
   Digital: 'Цифровая',

@@ -1,10 +1,19 @@
-import { FilterCategoryRus } from '../../const';
+import { FilterCategoryRus, categorysFilter } from '../../const';
+import { setCurrentCategory } from '../../store/filter-process/filter-process';
+import { selectCurrentCategory } from '../../store/filter-process/selectors';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 
-type TFilterByCategory = {
-  onChange: (filter: string) => void;
-  currentCategory: string;
-}
-export default function FilterByCategory ({onChange, currentCategory}: TFilterByCategory) {
+export default function FilterByCategory () {
+  const dispach = useAppDispatch();
+  const currentCategory = useAppSelector(selectCurrentCategory);
+
+  const handleChangeCategory = (category: string) => {
+    if(category === 'Фотокамера') {
+      dispach(setCurrentCategory('Фотоаппарат'));
+    } else {
+      dispach(setCurrentCategory(category));
+    }
+  };
 
   return (
     <>
@@ -14,8 +23,8 @@ export default function FilterByCategory ({onChange, currentCategory}: TFilterBy
             <input
               type="checkbox"
               name={item}
-              onChange={() => onChange(item)}
-              checked = {item === currentCategory}
+              checked = {categorysFilter[item] === currentCategory}
+              onChange={() => handleChangeCategory(FilterCategoryRus[item])}
             />
             <span className="custom-checkbox__icon" />
             <span className="custom-checkbox__label">
@@ -25,7 +34,5 @@ export default function FilterByCategory ({onChange, currentCategory}: TFilterBy
         </div>
       ))}
     </>
-
-
   );
 }

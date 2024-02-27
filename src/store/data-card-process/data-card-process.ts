@@ -47,8 +47,11 @@ export const dataCardsProcess = createSlice({
       .addCase(fetchSimilarProductsAction.fulfilled, (state, action) => {
         state.similarProducts = action.payload;
       })
-      .addCase(fetchCamerasByPriceAction.fulfilled, (state, action) => {
-        state.cards = action.payload;
+      .addCase(fetchCamerasByPriceAction.pending, (state) => {
+        state.isLoadingData = true;
+      })
+      .addCase(fetchCamerasByPriceAction.fulfilled, (state) => {
+        state.isLoadingData = false;
       });
   },
 });

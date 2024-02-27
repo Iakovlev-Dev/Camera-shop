@@ -1,15 +1,16 @@
-import { FilterCategory, FilterType, FilterTypeRus } from '../../const';
+import { FilterType, FilterTypeRus, categorysFilter } from '../../const';
+import { selectCurrentCategory, selectCurrentType } from '../../store/filter-process/selectors';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { setCurrentType } from '../../store/filter-process/filter-process';
 
-type TFilterByType = {
-  onChange: (evt: boolean, filter: string) => void;
-  currentCategory: string;
-}
 
-export default function FilterByType ({onChange, currentCategory}: TFilterByType) {
-
+export default function FilterByType () {
+  const dispatch = useAppDispatch();
+  const currentTypes = useAppSelector(selectCurrentType);
+  const currentCategory = useAppSelector(selectCurrentCategory);
 
   const disabledItem = (active: string, current: string) => {
-    if(active === FilterCategory.Fotocamera || !active) {
+    if(active === categorysFilter.Fotocamera || !active) {
       return false;
     } else {
       if (current === FilterType.Instant || current === FilterType.FilmCamera) {
@@ -18,6 +19,17 @@ export default function FilterByType ({onChange, currentCategory}: TFilterByType
         return false;
       }
     }
+  };
+
+  const handlerChangeType = (type: string) => {
+    const checkedTypes = [...currentTypes];
+    const typeIndex = currentTypes.indexOf(FilterTypeRus[type]);
+    if(typeIndex === -1) {
+      checkedTypes.push(FilterTypeRus[type]);
+    } else {
+      checkedTypes.splice(typeIndex, 1);
+    }
+    dispatch(setCurrentType(checkedTypes));
   };
 
   return (
@@ -29,7 +41,7 @@ export default function FilterByType ({onChange, currentCategory}: TFilterByType
               type="checkbox"
               name={item}
               disabled = {disabledItem(currentCategory, item)}
-              onChange={(evt) => onChange(evt.target.checked, FilterTypeRus[item])}
+              onChange={() => handlerChangeType(item)}
             />
             <span className="custom-checkbox__icon" />
             <span className="custom-checkbox__label">{FilterTypeRus[item]}</span>

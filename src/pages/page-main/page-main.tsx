@@ -4,18 +4,19 @@ import SortingBtn from '../../components/sorting-btn/sorting-btn';
 import Footer from '../../components/footer/footer';
 import Card from '../../components/card/card';
 import { useAppSelector } from '../../store/hooks';
-import { selectCards, selectLoadingStatusRejected } from '../../store/data-card-process/selectors';
+import { selectLoadingStatus, selectLoadingStatusRejected } from '../../store/data-card-process/selectors';
 import Banner from '../../components/banner/banner';
 import Pagination from '../../components/pagination/pagination';
 import { useEffect, useState } from 'react';
 import PopupAddCameras from '../../components/popup-add-camera/popup-add-camera';
 import { Helmet } from 'react-helmet-async';
-import { CARD_ON_PAGE, FilterCategory } from '../../const';
+import { CARD_ON_PAGE } from '../../const';
 import { selectActiveSortBtn, selectActiveSortBy } from '../../store/sorting-process/selectors';
-import { filtredCategory, sortingBy } from '../../utils';
-import { TCameraArray } from '../../types/type-camera';
+import { sortingBy } from '../../utils';
 import Filters from '../../components/filters/filters';
-
+import { selectCurrentCategory, selectCurrentLevel, selectCurrentType, selectFiltredCameras } from '../../store/filter-process/selectors';
+import { TCamera, TCameraArray } from '../../types/type-camera';
+import Loader from '../../components/loader/loader';
 
 export type TEventKey = {
   key: string;
@@ -25,7 +26,7 @@ export type TEventKey = {
 export default function PageMain () {
   const sortBtn = useAppSelector(selectActiveSortBtn);
   const sortBy = useAppSelector(selectActiveSortBy);
-  const cards = useAppSelector(selectCards);
+  const cards = useAppSelector(selectFiltredCameras);
   const sortedCards = sortingBy(sortBy, sortBtn, [...cards]);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -64,77 +65,39 @@ export default function PageMain () {
     return () => document.removeEventListener('keydown', handleClickEsc);
   }, [isOpenModal]);
 
-  const [categoryFiltersType, setCategoryFiltersType] = useState(new Set());
-  const [categoryFiltersLevel, setCategoriesFiltersLevel] = useState(new Set());
-  const [categoryFiltersCategory, setCategoryFiltersCategory] = useState('');
+  const currentCategory = useAppSelector(selectCurrentCategory);
+  const currentTypes = useAppSelector(selectCurrentType);
+  const currentLevel = useAppSelector(selectCurrentLevel);
 
-  const handleFilterChangeType = (checked: boolean, filter: string) => {
-    if(checked) {
-      setCategoryFiltersType((prev) => new Set(prev).add(filter));
-      setCurrentPage(1);
-    }
-    if(!checked) {
-      setCategoryFiltersType((prev) => {
-        const next = new Set(prev);
-        next.delete(filter);
-        setCurrentPage(1);
-        return next;
-      });
-    }
-  };
-
-  const handleFilterChangeLevel = (checked: boolean, filter: string) => {
-    if(checked) {
-      setCategoriesFiltersLevel((prev) => new Set(prev).add(filter));
-      setCurrentPage(1);
-    }
-    if(!checked) {
-      setCategoriesFiltersLevel((prev) => {
-        const next = new Set(prev);
-        next.delete(filter);
-        setCurrentPage(1);
-        return next;
-      });
-    }
-  };
-
-  if(!sortedCards){
-    return;
-  }
-
-  const getFiltredCameras = (): TCameraArray => {
+  const getFiltredCameras = (): TCameraArray | undefined => {
     let filtredCameras = sortedCards;
-    filtredCameras = categoryFiltersType.size === 0 ? filtredCameras : filtredCameras.filter((item) => categoryFiltersType.has(item.type));
-    filtredCameras = categoryFiltersLevel.size === 0 ? filtredCameras : filtredCameras.filter((item) => categoryFiltersLevel.has(item.level));
-    switch(categoryFiltersCategory) {
-      case FilterCategory.Fotocamera:
-        return filtredCategory[FilterCategory.Fotocamera](filtredCameras);
-      case FilterCategory.Videocamera:
-        return filtredCategory[FilterCategory.Videocamera](filtredCameras);
+    if(filtredCameras){
+      filtredCameras = currentCategory.length === 0 ? filtredCameras : filtredCameras.filter((camera: TCamera) => currentCategory.includes(camera.category));
+      filtredCameras = currentTypes.length === 0 ? filtredCameras : filtredCameras.filter((camera: TCamera) => currentTypes.includes(camera.type));
+      filtredCameras = currentLevel.length === 0 ? filtredCameras : filtredCameras.filter((camera: TCamera) => currentLevel.includes(camera.level));
+      return filtredCameras;
     }
-    return filtredCameras;
-  };
-
-  const handleResetClick = () => {
-    setCategoryFiltersType(new Set());
-    setCategoriesFiltersLevel(new Set());
-    setCategoryFiltersCategory('');
   };
 
   const filtredAllCameras = getFiltredCameras();
 
   const currentCardPage = filtredAllCameras?.slice(firstCardIndex, lastCardIndex);
 
-  const minValue = filtredAllCameras.reduce((acc, curr) => acc.price < curr.price ? acc : curr, filtredAllCameras[0]);
-  const maxValue = filtredAllCameras.reduce((acc, curr) => acc.price > curr.price ? acc : curr, filtredAllCameras[0]);
-
-  if (!minValue && !maxValue) {
-    return;
+  let countPages;
+  if(filtredAllCameras) {
+    countPages = Math.ceil(filtredAllCameras?.length / CARD_ON_PAGE);
+  } else {
+    countPages = 0;
   }
 
-  const countPages = Math.ceil(filtredAllCameras.length / CARD_ON_PAGE);
+  const isLoadingData = useAppSelector(selectLoadingStatus);
+  if(isLoadingData) {
+    document.body.classList.add('scroll-lock');
+  } else {
+    document.body.classList.remove('scroll-lock');
+  }
 
-  return (filtredAllCameras &&
+  return (
     <div className="wrapper">
       <Helmet>
         <title>Фотошоп</title>
@@ -167,15 +130,7 @@ export default function PageMain () {
               <h1 className="title title--h2">Каталог фото- и видеотехники</h1>
               <div className="page-content__columns">
                 <div className="catalog__aside">
-                  <Filters
-                    onChangeType={handleFilterChangeType}
-                    onChangeLevel={handleFilterChangeLevel}
-                    onChangeCategory={setCategoryFiltersCategory}
-                    onClickReset={handleResetClick}
-                    currentCategory={categoryFiltersCategory}
-                    min={minValue}
-                    max={maxValue}
-                  />
+                  <Filters />
                 </div>
                 <div className="catalog__content">
                   <div className="catalog-sort">
@@ -191,15 +146,17 @@ export default function PageMain () {
                       </div>
                     </form>
                   </div>
+                  {isLoadingData ? <Loader /> : ''}
                   <div className="cards catalog__cards">
-                    {currentCardPage?.map((item) =>
-                      (
-                        <Card
-                          key={item.id}
-                          card={item}
-                          onClick={() => handleOpenModal()}
-                        />))}
                     {isLoadingStatusRejected ? 'Нет подключение к серверу' : ''}
+                    {currentCardPage === undefined || filtredAllCameras?.length === 0 && !isLoadingStatusRejected && !isLoadingData ? 'По вашему запросу ничего не найдено' :
+                      currentCardPage.map((item) =>
+                        (
+                          <Card
+                            key={item.id}
+                            card={item}
+                            onClick={() => handleOpenModal()}
+                          />))}
                   </div>
                   <Pagination count={countPages} currentPage={currentPage} setPage={paginate}/>
                 </div>
