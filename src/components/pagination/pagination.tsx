@@ -5,7 +5,6 @@ import { useSearchParams } from 'react-router-dom';
 import { MAX_PAGES } from '../../const';
 import { TEventKey } from '../../pages/page-main/page-main';
 
-
 type TPagination = {
     count: number;
     currentPage: number;
@@ -24,6 +23,12 @@ export default function Pagination ({count, currentPage, setPage}: TPagination) 
   useEffect(() => {
     setSearchParams({page: (currentPage).toString()});
   }, [currentPage, setSearchParams]);
+
+  useEffect(() => {
+    setPage(1);
+    setFirstPageIndex(0);
+    setLastPageIndex(3);
+  }, [setPage]);
 
   const clickNextButton = () => {
     setPage(lastPageIndex + 1);

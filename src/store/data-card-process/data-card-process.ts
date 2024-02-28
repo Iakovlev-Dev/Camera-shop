@@ -6,18 +6,22 @@ import { TSimilarProductArray } from '../../types/type-similar-product';
 
 export type TinitialStateDataCards = {
     cards: TCamera [];
+    filtredCards: TCamera[];
     cardCurrent: TCamera | null;
     similarProducts: TSimilarProductArray;
     isLoadingData: boolean;
     isLoadibgDataRejected: boolean;
+    currentPage: number;
 }
 
 const initialState: TinitialStateDataCards = {
   cards: [],
+  filtredCards: [],
   cardCurrent: null,
   similarProducts: [],
   isLoadingData: false,
-  isLoadibgDataRejected: false
+  isLoadibgDataRejected: false,
+  currentPage: 1,
 };
 
 export const dataCardsProcess = createSlice({
@@ -26,7 +30,7 @@ export const dataCardsProcess = createSlice({
   reducers: {
     setCardId(state, action: PayloadAction<TCamera>) {
       state.cardCurrent = action.payload;
-    }
+    },
   },
   extraReducers(builder) {
     builder

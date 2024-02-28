@@ -1,10 +1,13 @@
 import { ChangeEvent, useEffect, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { selectMaxPrice, selectMinAndMaxPrice, selectMinAndMaxPriceFiltered, selectMinPrice } from '../../store/filter-process/selectors';
+import { selectMaxPrice, selectMinAndMaxPrice, selectMinPrice } from '../../store/filter-process/selectors';
 import { setMaxPrice, setMinPrice } from '../../store/filter-process/filter-process';
 import { fetchCamerasByPriceAction } from '../../store/api-action';
-
-export default function FilterByPrice () {
+import { TCameraArray } from '../../types/type-camera';
+type TFilterPrice = {
+  cameras: TCameraArray;
+}
+export default function FilterByPrice ({cameras}: TFilterPrice) {
   const dispatch = useAppDispatch();
   // const [searchParams, setSearchParams] = useSearchParams();
   // const params = Object.fromEntries(searchParams);
@@ -15,12 +18,20 @@ export default function FilterByPrice () {
   const maxPriceValue = useAppSelector(selectMaxPrice);
 
   const [minPrice, maxPrice] = useAppSelector(selectMinAndMaxPrice);
-  const [minPriceFilter, maxPriceFilter] = useAppSelector(selectMinAndMaxPriceFiltered);
+
+  const sortedCameras = cameras.sort((a, b) => a.price - b.price);
+  const min = sortedCameras.at(0)?.price;
+  const max = sortedCameras.at(-1)?.price;
 
   useEffect(() => {
     dispatch(setMinPrice(minPrice?.toString() || ''));
     dispatch(setMaxPrice(maxPrice?.toString() || ''));
   }, [dispatch, maxPrice, minPrice]);
+
+  useEffect(() => {
+    dispatch(setMinPrice(min?.toString() || ''));
+    dispatch(setMaxPrice(max?.toString() || ''));
+  }, [dispatch, max, min]);
 
   useEffect(() => {
     dispatch(fetchCamerasByPriceAction(`price_gte=${minPriceValue.toString() || '0'}&price_lte=${maxPriceValue.toString() || maxPrice?.toString() || ''}`));
@@ -34,43 +45,42 @@ export default function FilterByPrice () {
         inputMinRef.current.value = minPrice.toString();
         inputValue = minPrice;
       }
-      if(maxPriceFilter && inputMinRef.current && inputValue > maxPriceFilter) {
-        inputMinRef.current.value = maxPriceFilter.toString();
+      if(max && inputMinRef.current && inputValue > max) {
+        inputMinRef.current.value = max.toString();
       }
       dispatch(setMinPrice(evt.target.value));
     }
   };
 
   const handleChangeMaxValue = (evt: ChangeEvent<HTMLInputElement>) => {
-    if(maxPrice && minPrice && inputMaxRef.current && maxPriceFilter) {
+    if(maxPrice && minPrice && inputMaxRef.current && max) {
       let inputValue = Number(evt.target.value);
       if(inputMaxRef.current && inputValue > maxPrice) {
         inputMaxRef.current.value = maxPrice.toString();
         inputValue = maxPrice;
       }
-      if(inputMaxRef.current && minPriceFilter && inputValue < minPriceFilter) {
-        inputValue = maxPriceFilter;
-        inputMaxRef.current.value = maxPriceFilter.toString();
+      if(inputMaxRef.current && min && inputValue < min) {
+        inputValue = max;
+        inputMaxRef.current.value = max.toString();
       }
       if(inputValue === Number(maxPriceValue)) {
-        inputMaxRef.current.value = maxPriceFilter.toString();
+        inputMaxRef.current.value = max.toString();
       }
       dispatch(setMaxPrice(evt.target.value));
     }
   };
 
+  useEffect(() => {
+    if(inputMaxRef.current && max) {
+      inputMaxRef.current.value = max.toString();
+    }
+  }, [max]);
 
   useEffect(() => {
-    if(inputMaxRef.current && maxPriceFilter) {
-      inputMaxRef.current.value = maxPriceFilter.toString();
+    if(inputMinRef.current && min) {
+      inputMinRef.current.value = min.toString();
     }
-  }, [maxPriceFilter]);
-
-  useEffect(() => {
-    if(inputMinRef.current && minPriceFilter) {
-      inputMinRef.current.value = minPriceFilter.toString();
-    }
-  }, [minPriceFilter]);
+  }, [min]);
 
   return (
     <div className="catalog-filter__price-range">
@@ -79,6 +89,7 @@ export default function FilterByPrice () {
           <input
             type="number"
             name="price"
+            placeholder={min?.toString()}
             ref={inputMinRef}
             onBlur={handleChangeMinValue}
           />
@@ -89,6 +100,7 @@ export default function FilterByPrice () {
           <input
             type="number"
             name="priceUp"
+            placeholder={max?.toString()}
             ref={inputMaxRef}
             onBlur={handleChangeMaxValue}
           />

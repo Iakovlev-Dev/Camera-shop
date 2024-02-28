@@ -78,7 +78,6 @@ export default function PageMain () {
       return filtredCameras;
     }
   };
-
   const filtredAllCameras = getFiltredCameras();
 
   const currentCardPage = filtredAllCameras?.slice(firstCardIndex, lastCardIndex);
@@ -130,7 +129,7 @@ export default function PageMain () {
               <h1 className="title title--h2">Каталог фото- и видеотехники</h1>
               <div className="page-content__columns">
                 <div className="catalog__aside">
-                  <Filters />
+                  <Filters cards={filtredAllCameras || []} setPage={setCurrentPage}/>
                 </div>
                 <div className="catalog__content">
                   <div className="catalog-sort">

@@ -17,11 +17,3 @@ export const selectMinAndMaxPrice = createSelector([selectCards], (cards) => {
 
   return [minPrice, maxPrice];
 });
-
-export const selectMinAndMaxPriceFiltered = createSelector([selectFiltredCameras], (cards) => {
-  const sortedCameras = [...cards].sort((a, b) => a.price - b.price);
-  const minPrice = sortedCameras.at(0)?.price;
-  const maxPrice = sortedCameras.at(-1)?.price;
-
-  return [minPrice, maxPrice];
-});
