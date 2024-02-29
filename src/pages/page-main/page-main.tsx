@@ -157,7 +157,7 @@ export default function PageMain () {
                             onClick={() => handleOpenModal()}
                           />))}
                   </div>
-                  <Pagination count={countPages} currentPage={currentPage} setPage={paginate}/>
+                  <Pagination count={countPages} currentPage={currentPage} setPage={paginate} />
                 </div>
               </div>
             </div>

@@ -24,11 +24,6 @@ export default function Pagination ({count, currentPage, setPage}: TPagination) 
     setSearchParams({page: (currentPage).toString()});
   }, [currentPage, setSearchParams]);
 
-  useEffect(() => {
-    setPage(1);
-    setFirstPageIndex(0);
-    setLastPageIndex(3);
-  }, [setPage]);
 
   const clickNextButton = () => {
     setPage(lastPageIndex + 1);
