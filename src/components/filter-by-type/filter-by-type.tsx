@@ -2,12 +2,16 @@ import { FilterType, FilterTypeRus, categorysFilter } from '../../const';
 import { selectCurrentCategory, selectCurrentType } from '../../store/filter-process/selectors';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { setCurrentType } from '../../store/filter-process/filter-process';
+import { useSearchParams } from 'react-router-dom';
 
 
 export default function FilterByType () {
   const dispatch = useAppDispatch();
   const currentTypes = useAppSelector(selectCurrentType);
   const currentCategory = useAppSelector(selectCurrentCategory);
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const params = Object.fromEntries(searchParams);
 
   const disabledItem = (active: string, current: string) => {
     if(active === categorysFilter.Fotocamera || !active) {
@@ -29,6 +33,10 @@ export default function FilterByType () {
     } else {
       checkedTypes.splice(typeIndex, 1);
     }
+    setSearchParams({
+      ...params,
+      types: checkedTypes.join('-')
+    });
     dispatch(setCurrentType(checkedTypes));
   };
 

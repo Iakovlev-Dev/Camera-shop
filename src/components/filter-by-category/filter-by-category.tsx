@@ -1,3 +1,4 @@
+import { useSearchParams } from 'react-router-dom';
 import { FilterCategoryRus, categorysFilter } from '../../const';
 import { setCurrentCategory } from '../../store/filter-process/filter-process';
 import { selectCurrentCategory } from '../../store/filter-process/selectors';
@@ -6,12 +7,20 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 export default function FilterByCategory () {
   const dispach = useAppDispatch();
   const currentCategory = useAppSelector(selectCurrentCategory);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const params = Object.fromEntries(searchParams);
 
   const handleChangeCategory = (category: string) => {
     if(category === 'Фотокамера') {
       dispach(setCurrentCategory('Фотоаппарат'));
+      setSearchParams({
+        ...params,
+        cat: 'Фотоаппарат'});
     } else {
       dispach(setCurrentCategory(category));
+      setSearchParams({
+        ...params,
+        cat: category});
     }
   };
 

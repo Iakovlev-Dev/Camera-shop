@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import ButtonPagination from '../pagination-button-prev/pagination-button-prev';
 import PaginationPage from '../pagination-page/pagination-page';
 import { useSearchParams } from 'react-router-dom';
@@ -17,24 +17,28 @@ export default function Pagination ({count, currentPage, setPage}: TPagination) 
   const [lastPageIndex, setLastPageIndex] = useState(3);
   const pagesSlice = pagesArray.slice(firstPageIndex, lastPageIndex);
 
-  const [ , setSearchParams] = useSearchParams();
-
-
-  useEffect(() => {
-    setSearchParams({page: (currentPage).toString()});
-  }, [currentPage, setSearchParams]);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const params = Object.fromEntries(searchParams);
 
 
   const clickNextButton = () => {
     setPage(lastPageIndex + 1);
     setFirstPageIndex(firstPageIndex + MAX_PAGES);
     setLastPageIndex(lastPageIndex + MAX_PAGES);
+    setSearchParams({
+      ...params,
+      page: (lastPageIndex + 1).toString()
+    });
   };
 
   const clickPrevButton = () => {
     setPage(firstPageIndex);
     setFirstPageIndex(firstPageIndex - MAX_PAGES);
     setLastPageIndex(lastPageIndex - MAX_PAGES);
+    setSearchParams({
+      ...params,
+      page: (firstPageIndex).toString()
+    });
   };
 
   const handleKeyEnterNext = (evt: TEventKey) => {

@@ -4,6 +4,7 @@ import { selectMaxPrice, selectMinAndMaxPrice, selectMinPrice } from '../../stor
 import { setMaxPrice, setMinPrice } from '../../store/filter-process/filter-process';
 import { fetchCamerasByPriceAction } from '../../store/api-action';
 import { TCameraArray } from '../../types/type-camera';
+import { useSearchParams } from 'react-router-dom';
 type TFilterPrice = {
   cameras: TCameraArray;
 }
@@ -17,6 +18,9 @@ export default function FilterByPrice ({cameras}: TFilterPrice) {
   const minPriceValue = useAppSelector(selectMinPrice);
   const maxPriceValue = useAppSelector(selectMaxPrice);
 
+  const [searchParams, setSearchParams] = useSearchParams();
+  const params = Object.fromEntries(searchParams);
+
   const [minPrice, maxPrice] = useAppSelector(selectMinAndMaxPrice);
 
   const sortedCameras = cameras.sort((a, b) => a.price - b.price);
@@ -27,11 +31,6 @@ export default function FilterByPrice ({cameras}: TFilterPrice) {
     dispatch(setMinPrice(minPrice?.toString() || ''));
     dispatch(setMaxPrice(maxPrice?.toString() || ''));
   }, [dispatch, maxPrice, minPrice]);
-
-  useEffect(() => {
-    dispatch(setMinPrice(min?.toString() || ''));
-    dispatch(setMaxPrice(max?.toString() || ''));
-  }, [dispatch, max, min]);
 
   useEffect(() => {
     dispatch(fetchCamerasByPriceAction(`price_gte=${minPriceValue.toString() || '0'}&price_lte=${maxPriceValue.toString() || maxPrice?.toString() || ''}`));
@@ -48,6 +47,10 @@ export default function FilterByPrice ({cameras}: TFilterPrice) {
       if(max && inputMinRef.current && inputValue > max) {
         inputMinRef.current.value = max.toString();
       }
+      setSearchParams({
+        ...params,
+        minPrice: inputMinRef.current.value.toString()
+      });
       dispatch(setMinPrice(evt.target.value));
     }
   };
@@ -66,6 +69,10 @@ export default function FilterByPrice ({cameras}: TFilterPrice) {
       if(inputValue === Number(maxPriceValue)) {
         inputMaxRef.current.value = max.toString();
       }
+      setSearchParams({
+        ...params,
+        maxPrice: inputMaxRef.current.value.toString()
+      });
       dispatch(setMaxPrice(evt.target.value));
     }
   };

@@ -1,4 +1,5 @@
 // import { useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { setCurrentCategory, setCurrentLevel, setCurrentType, setMaxPrice, setMinPrice } from '../../store/filter-process/filter-process';
 import { selectMinAndMaxPrice } from '../../store/filter-process/selectors';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
@@ -12,11 +13,20 @@ type TFilters = {
   cards: TCameraArray;
   setPage: (arg: number) => void;
 }
+export type TParams = {
+  page?: string;
+  cat?: string;
+  types?: string;
+  level?: string;
+  minPrice?: string;
+  maxPrice?: string;
+}
 
 export default function Filters ({cards, setPage}: TFilters) {
   const dispatch = useAppDispatch();
   const [minPrice, maxPrice] = useAppSelector(selectMinAndMaxPrice);
-
+  const [searchParams, setSearchParams] = useSearchParams();
+  const params: TParams = Object.fromEntries(searchParams);
 
   const reset = () => {
     dispatch(setCurrentCategory(''));
@@ -25,6 +35,16 @@ export default function Filters ({cards, setPage}: TFilters) {
     dispatch(setMaxPrice(maxPrice?.toString() || ''));
     dispatch(setMinPrice(minPrice?.toString() || ''));
     setPage(1);
+    delete params['cat'];
+    delete params['types'];
+    delete params['level'];
+    delete params['minPrice'];
+    delete params['maxPrice'];
+    setSearchParams({
+      ...params,
+      page: '1',
+
+    });
   };
 
   return (

@@ -1,3 +1,4 @@
+import { useSearchParams } from 'react-router-dom';
 import { FilterLevelRus } from '../../const';
 import { setCurrentLevel } from '../../store/filter-process/filter-process';
 import { selectCurrentLevel } from '../../store/filter-process/selectors';
@@ -7,6 +8,9 @@ export default function FilterByLevel () {
   const dispatch = useAppDispatch();
   const currentLevel = useAppSelector(selectCurrentLevel);
 
+  const [searchParams, setSearchParams] = useSearchParams();
+  const params = Object.fromEntries(searchParams);
+
   const handleChangeLevel = (level: string) => {
     const checkedLevel = [...currentLevel];
     const indexLevel = currentLevel.indexOf(level);
@@ -15,6 +19,10 @@ export default function FilterByLevel () {
     } else {
       checkedLevel.splice(indexLevel, 1);
     }
+    setSearchParams({
+      ...params,
+      level: checkedLevel.join('-')
+    });
     dispatch(setCurrentLevel(checkedLevel));
   };
 
