@@ -1,8 +1,8 @@
 import dayjs from 'dayjs';
 import updateLocale from 'dayjs/plugin/updateLocale';
 import { TReviews } from './types/type-reviews';
-import { TCamera } from './types/type-camera';
-import { SortBtn, SortBy } from './const';
+import { TCamera, TCameraArray } from './types/type-camera';
+import { FilterCategory, FilterCategoryRus, SortBtn, SortBy } from './const';
 
 export const dateFormatReview = (date: string) => dayjs(date).format('DD MMMM');
 
@@ -40,4 +40,9 @@ export const sortingBy = (activeSort: string, activeBtn: string, cameras: TCamer
     default:
       return cameras;
   }
+};
+
+export const filtredCategory = {
+  [FilterCategory.Fotocamera]: (cameras: TCameraArray) => cameras.filter((camera) => camera.category === 'Фотоаппарат'),
+  [FilterCategory.Videocamera]: (cameras: TCameraArray) => cameras.filter((camera) => camera.category === FilterCategoryRus.Videocamera)
 };

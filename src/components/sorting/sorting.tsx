@@ -8,7 +8,6 @@ export default function Sorting () {
   const sortBtn = useAppSelector(selectActiveSortBtn);
   const sortBy = useAppSelector(selectActiveSortBy);
 
-
   const handleClickSort = (sort: string) => {
     dispatch(setActiveSortBy(sort));
     if(!sortBtn) {

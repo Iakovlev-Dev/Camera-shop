@@ -1,4 +1,5 @@
 
+import { useSearchParams } from 'react-router-dom';
 import { TEventKey } from '../../pages/page-main/page-main';
 
 type TPaginationPage = {
@@ -8,9 +9,15 @@ type TPaginationPage = {
 }
 
 export default function PaginationPage ({page, currentPage, onClick}: TPaginationPage) {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const params = Object.fromEntries(searchParams);
 
   const handleClickPage = (pageNumber: number) => {
     onClick(pageNumber);
+    setSearchParams({
+      ...params,
+      page: (pageNumber).toString()
+    });
   };
   const handleKeyEnter = (pageNumber: number) => {
     if(pageNumber === currentPage) {

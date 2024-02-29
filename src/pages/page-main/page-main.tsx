@@ -1,13 +1,10 @@
 import Header from '../../components/header/header';
-import FilterByCategory from '../../components/filter-by-category/filter-by-category';
-import FilterByType from '../../components/filter-by-type/filter-by-type';
-import FilterByLevel from '../../components/filter-by-level/filter-by-level';
 import Sorting from '../../components/sorting/sorting';
 import SortingBtn from '../../components/sorting-btn/sorting-btn';
 import Footer from '../../components/footer/footer';
 import Card from '../../components/card/card';
 import { useAppSelector } from '../../store/hooks';
-import { selectCards, selectLoadingStatusRejected } from '../../store/data-card-process/selectors';
+import { selectLoadingStatus, selectLoadingStatusRejected } from '../../store/data-card-process/selectors';
 import Banner from '../../components/banner/banner';
 import Pagination from '../../components/pagination/pagination';
 import { useEffect, useState } from 'react';
@@ -16,6 +13,10 @@ import { Helmet } from 'react-helmet-async';
 import { CARD_ON_PAGE } from '../../const';
 import { selectActiveSortBtn, selectActiveSortBy } from '../../store/sorting-process/selectors';
 import { sortingBy } from '../../utils';
+import Filters from '../../components/filters/filters';
+import { selectCurrentCategory, selectCurrentLevel, selectCurrentType, selectFiltredCameras } from '../../store/filter-process/selectors';
+import { TCamera, TCameraArray } from '../../types/type-camera';
+import Loader from '../../components/loader/loader';
 
 export type TEventKey = {
   key: string;
@@ -25,14 +26,12 @@ export type TEventKey = {
 export default function PageMain () {
   const sortBtn = useAppSelector(selectActiveSortBtn);
   const sortBy = useAppSelector(selectActiveSortBy);
-  const cards = useAppSelector(selectCards);
-
+  const cards = useAppSelector(selectFiltredCameras);
   const sortedCards = sortingBy(sortBy, sortBtn, [...cards]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const lastCardIndex = currentPage * CARD_ON_PAGE;
   const firstCardIndex = lastCardIndex - CARD_ON_PAGE;
-  const currentCardPage = sortedCards?.slice(firstCardIndex, lastCardIndex);
 
   const paginate = (pageNumber: number) => {
     setCurrentPage(pageNumber);
@@ -40,7 +39,6 @@ export default function PageMain () {
   useEffect(() => {
     setCurrentPage(currentPage);
   }, [currentPage]);
-
 
   const isLoadingStatusRejected = useAppSelector(selectLoadingStatusRejected);
 
@@ -67,14 +65,36 @@ export default function PageMain () {
     return () => document.removeEventListener('keydown', handleClickEsc);
   }, [isOpenModal]);
 
-  if(!cards) {
-    return (
-      <>
-      </>
-    );
+  const currentCategory = useAppSelector(selectCurrentCategory);
+  const currentTypes = useAppSelector(selectCurrentType);
+  const currentLevel = useAppSelector(selectCurrentLevel);
+
+  const getFiltredCameras = (): TCameraArray | undefined => {
+    let filtredCameras = sortedCards;
+    if(filtredCameras){
+      filtredCameras = currentCategory.length === 0 ? filtredCameras : filtredCameras.filter((camera: TCamera) => currentCategory.includes(camera.category));
+      filtredCameras = currentTypes.length === 0 ? filtredCameras : filtredCameras.filter((camera: TCamera) => currentTypes.includes(camera.type));
+      filtredCameras = currentLevel.length === 0 ? filtredCameras : filtredCameras.filter((camera: TCamera) => currentLevel.includes(camera.level));
+      return filtredCameras;
+    }
+  };
+  const filtredAllCameras = getFiltredCameras();
+
+  const currentCardPage = filtredAllCameras?.slice(firstCardIndex, lastCardIndex);
+
+  let countPages;
+  if(filtredAllCameras) {
+    countPages = Math.ceil(filtredAllCameras?.length / CARD_ON_PAGE);
+  } else {
+    countPages = 0;
   }
 
-  const countPages = Math.ceil(cards.length / CARD_ON_PAGE);
+  const isLoadingData = useAppSelector(selectLoadingStatus);
+  if(isLoadingData) {
+    document.body.classList.add('scroll-lock');
+  } else {
+    document.body.classList.remove('scroll-lock');
+  }
 
   return (
     <div className="wrapper">
@@ -109,48 +129,7 @@ export default function PageMain () {
               <h1 className="title title--h2">Каталог фото- и видеотехники</h1>
               <div className="page-content__columns">
                 <div className="catalog__aside">
-                  <div className="catalog-filter">
-                    <form action="#">
-                      <h2 className="visually-hidden">Фильтр</h2>
-                      <fieldset className="catalog-filter__block">
-                        <legend className="title title--h5">Цена, ₽</legend>
-                        <div className="catalog-filter__price-range">
-                          <div className="custom-input">
-                            <label>
-                              <input type="number" name="price" placeholder="от" />
-                            </label>
-                          </div>
-                          <div className="custom-input">
-                            <label>
-                              <input
-                                type="number"
-                                name="priceUp"
-                                placeholder="до"
-                              />
-                            </label>
-                          </div>
-                        </div>
-                      </fieldset>
-                      <fieldset className="catalog-filter__block">
-                        <legend className="title title--h5">Категория</legend>
-                        <FilterByCategory />
-                      </fieldset>
-                      <fieldset className="catalog-filter__block">
-                        <legend className="title title--h5">Тип камеры</legend>
-                        <FilterByType />
-                      </fieldset>
-                      <fieldset className="catalog-filter__block">
-                        <legend className="title title--h5">Уровень</legend>
-                        <FilterByLevel />
-                      </fieldset>
-                      <button
-                        className="btn catalog-filter__reset-btn"
-                        type="reset"
-                      >
-                    Сбросить фильтры
-                      </button>
-                    </form>
-                  </div>
+                  <Filters cards={filtredAllCameras || []} setPage={setCurrentPage}/>
                 </div>
                 <div className="catalog__content">
                   <div className="catalog-sort">
@@ -166,17 +145,19 @@ export default function PageMain () {
                       </div>
                     </form>
                   </div>
+                  {isLoadingData ? <Loader /> : ''}
                   <div className="cards catalog__cards">
-                    {currentCardPage?.map((item) =>
-                      (
-                        <Card
-                          key={item.id}
-                          card={item}
-                          onClick={() => handleOpenModal()}
-                        />))}
                     {isLoadingStatusRejected ? 'Нет подключение к серверу' : ''}
+                    {currentCardPage === undefined || filtredAllCameras?.length === 0 && !isLoadingStatusRejected && !isLoadingData ? 'По вашему запросу ничего не найдено' :
+                      currentCardPage.map((item) =>
+                        (
+                          <Card
+                            key={item.id}
+                            card={item}
+                            onClick={() => handleOpenModal()}
+                          />))}
                   </div>
-                  <Pagination count={countPages} currentPage={currentPage} setPage={paginate}/>
+                  <Pagination count={countPages} currentPage={currentPage} setPage={paginate} />
                 </div>
               </div>
             </div>
